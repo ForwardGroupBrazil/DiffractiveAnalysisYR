@@ -443,7 +443,7 @@ void BosonAnalyzer::FillCollections(const edm::Event& iEvent, const edm::EventSe
     protonLorentzVector.push_back(protonVector[0]->p4());
   }
 
-  if (protonVector.size()==2){
+  if (protonVector.size()>1){
     protonLorentzVector.push_back(protonVector[0]->p4());
     protonLorentzVector.push_back(protonVector[1]->p4());
   }
