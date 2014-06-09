@@ -121,7 +121,7 @@ class BosonAnalyzer : public edm::EDAnalyzer {
     std::vector< math::XYZTLorentzVector > protonLorentzVector;
     std::vector< math::XYZTLorentzVector > LeadingElectronsP4;
     std::vector< math::XYZTLorentzVector > LeadingMuonsP4;
-    math::XYZTLorentzVector METP4;
+    std::vector< math::XYZTLorentzVector >  METP4;
     double METSumEt;
 
     int nTracks;
@@ -287,6 +287,7 @@ void BosonAnalyzer::Init(){
   LeadingElectronsSigmaIeIe.clear();
   LeadingElectronsHE.clear();
   LeadingMuonsIsolation.clear();
+  METP4.clear();
 
   nTracks = -999;
   nVertex = -999;
@@ -520,7 +521,7 @@ void BosonAnalyzer::SavingInformation(){
   if((WMassElectron > WMassMuon) && (WMassElectron > ZMassDiMuon) && (WMassElectron > ZMassDiElectron)){
     if (WMassElectron > 60. && WMassElectron < 110.){
       LeadingElectronsP4.push_back(ElectronVector[0]->p4());
-      METP4 = NeutrinoVector[0]->p4();
+      METP4.push_back(NeutrinoVector[0]->p4());
       METSumEt = NeutrinoVector[0]->sumEt();
       LeadingElectronsIsolation.push_back(ElectronVector[0]->dr03TkSumPt()/ElectronVector[0]->pt());
       LeadingElectronsIsoEcal.push_back(ElectronVector[0]->dr03EcalRecHitSumEt()/ElectronVector[0]->pt());
@@ -538,7 +539,7 @@ void BosonAnalyzer::SavingInformation(){
   if((WMassMuon > WMassElectron) && (WMassMuon > ZMassDiMuon) && (WMassMuon > ZMassDiElectron)){
     if (WMassMuon > 60. && WMassMuon < 110.){
       LeadingMuonsP4.push_back(MuonVector[0]->p4());
-      METP4 = NeutrinoVector[0]->p4();
+      METP4.push_back(NeutrinoVector[0]->p4());
       METSumEt = NeutrinoVector[0]->sumEt();
       LeadingMuonsIsolation.push_back(MuonVector[0]->isolationR03().sumPt);
     }
