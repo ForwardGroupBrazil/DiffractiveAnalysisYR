@@ -85,8 +85,6 @@ class BosonAnalyzer : public edm::EDAnalyzer {
     // ----------member data ---------------------------
 
     void FillCollections(const edm::Event&, const edm::EventSetup&, bool debug);
-    void FillCastorInfo(const edm::Event&, const edm::EventSetup&, bool debug);
-    void FillCastorDebug(const edm::Event&, const edm::EventSetup&, bool debug);
     void SavingInformation();
     void PrintOrder();
 
@@ -111,8 +109,6 @@ class BosonAnalyzer : public edm::EDAnalyzer {
     edm::InputTag electronTag_;
     edm::InputTag muonTag_;
     edm::InputTag metTag_;
-    bool accessCastorInfo_;
-    edm::InputTag castorRecHitTag_;
 
     std::vector<const reco::Vertex*> VertexVector;
     std::vector< math::XYZVector > VertexPosition;
@@ -161,13 +157,6 @@ class BosonAnalyzer : public edm::EDAnalyzer {
     std::vector<double> LeadingElectronsSigmaIeIe;
     std::vector<double> LeadingElectronsHE;
     std::vector<double> LeadingMuonsIsolation;
-
-    std::vector<double> castor_tower;
-    std::vector<double> castor_tower_module1;
-    std::vector<double> castor_tower_module2;
-    std::vector<double> castor_tower_module3;
-    std::vector<double> castor_tower_module4;
-    std::vector<double> castor_tower_module5;
 
     bool ZMassE;
     bool ZMassMu;
@@ -227,9 +216,7 @@ BosonAnalyzer::BosonAnalyzer(const edm::ParameterSet& iConfig):
   debug_(iConfig.getParameter<bool>("debug")),
   electronTag_(iConfig.getParameter<edm::InputTag>("electronTag")),
   muonTag_(iConfig.getParameter<edm::InputTag>("muonTag")),
-  metTag_(iConfig.getParameter<edm::InputTag>("metTag")),
-  accessCastorInfo_(iConfig.getParameter<bool>("accessCastorInfo")),
-  castorRecHitTag_(iConfig.getParameter<edm::InputTag>("castorRecHitTag"))
+  metTag_(iConfig.getParameter<edm::InputTag>("metTag"))
 {
 
   edm::Service<TFileService> fs;
@@ -262,19 +249,6 @@ BosonAnalyzer::BosonAnalyzer(const edm::ParameterSet& iConfig):
   eventTree_->Branch("nVertex",&nVertex,"nVertex/I");
   eventTree_->Branch("nTracks",&nTracks,"nTracks/I");
 
-  /*
-     TFileDirectory castorDir = fs->mkdir("CastorInfo");
-     CastorChannelHisto_ = castorDir.make<TH1F>("CastorChannelWorking","Working Channel; Channel (id); # Times of working",240,0,240);
-     for (int chan=1; chan <=224; chan++){
-     char castor_channels[300];
-     char castor_title[300];
-     sprintf(castor_channels,"Castor_Channel_%d",chan);
-     sprintf(castor_title,"Castor Channel %d Energy Distribution; Energy [GeV]; NEvents",chan);
-     histo_castor_channels = castorDir.make<TH1F>(castor_channels,castor_title,1000,0,500);
-     m_hVector_histo_castor_channels.push_back(histo_castor_channels);
-     }
-   */
-
 }
 
 BosonAnalyzer::~BosonAnalyzer()
@@ -301,11 +275,7 @@ void BosonAnalyzer::endJob()
 void BosonAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup){
 
   Init(); // Clean Variables
-  FillCollections(iEvent, iSetup, true); // Debug option, true = show Boson Mass, false = do not show Boson Mass.
-  if (accessCastorInfo_){
-    //    FillCastorInfo(iEvent,iSetup);
-    //    FillCastorDebug(iEvent,iSetup);
-  }
+  FillCollections(iEvent, iSetup, false); // Debug option, true = show Boson Mass, false = do not show Boson Mass.
   if(debug_) PrintOrder();
   SavingInformation();
   eventTree_->Fill();
@@ -339,15 +309,6 @@ void BosonAnalyzer::Init(){
   LeadingElectronsHE.clear();
   LeadingMuonsIsolation.clear();
   METP4.clear();
-
-  /*
-     castor_tower;
-     castor_tower_module1.clear();
-     castor_tower_module2.clear();
-     castor_tower_module3.clear();
-     castor_tower_module4.clear();
-     castor_tower_module5.clear();
-   */
 
   nTracks = -999;
   nVertex = -999;
@@ -698,164 +659,6 @@ void BosonAnalyzer::PrintOrder(){
   }
 
 }
-
-/*
-
-   void BosonAnalyzer::FillCastorInfo(const edm::Event& iEvent, const edm::EventSetup& iSetup){
-
-// Phi: 16 modules, rh.id().sector();
-// Z: 14 modules, rh.id().module();
-// Channel definition: 16*(rh.id().module()-1) + rh.id().sector();
-// For 2010, Castor uses only first five modules.
-
-bool debug = false;
-bool debug_deep = false;
-
-edm::Handle<CastorRecHitCollection> CastorRecHits;
-event.getByLabel(castorRecHitTag_,CastorRecHits);
-
-double sumCastorTower[16];
-double energyModule1[16];
-double energyModule2[16];
-double energyModule3[16];
-double energyModule4[16];
-double energyModule5[16];
-
-for(int isec = 0; isec < 16; isec++) {
-sumCastorTower[isec] = 0.;
-energyModule1[isec] = 0.;
-energyModule2[isec] = 0.;
-energyModule3[isec] = 0.;
-energyModule4[isec] = 0.;
-energyModule5[isec] = 0.;
-}
-
-if( CastorRecHits.isValid() ){
-
-for (size_t i = 0; i < CastorRecHits->size(); ++i) {
-
-bool used_cha = false;
-const CastorRecHit & rh = (*CastorRecHits)[i];
-int cha = 16*(rh.id().module()-1) + rh.id().sector();
-
-m_hVector_histo_castor_channels.at(cha-1)->Fill(rh.energy()*fCGeVCastor_);
-
-if(RunA_ && !RunB_){
-if(cha != 5 && cha != 6 && cha !=11 && cha !=12) used_cha = true;
-if (rh.id().module() > 5 ) continue;
-}
-if(!RunA_ && RunB_){
-if(cha != 13 && cha != 14 && (cha >=73 && cha <=80)) used_cha = true;
-if (rh.id().module() > 5 ) continue;
-}
-if((RunA_ && RunB_) || (!RunA_ && !RunB_)){
-used_cha = true;
-}
-
-if(used_cha == false) continue;
-
-if (debug_deep) std::cout << "Channel: " << cha << std::endl;
-if (debug_deep) std::cout << "Energy: " << rh.energy()*fCGeVCastor_ << " | Sector: " << rh.id().sector() << " | Module: " << rh.id().module() << " | Channel: " << cha << std::endl;
-
-for(int isec = 0; isec < 16; isec++) {
-if (rh.id().sector()== isec+1){
-sumCastorTower[isec]+=rh.energy()*fCGeVCastor_;
-
-if (rh.id().module() == 1){
-energyModule1[isec] = rh.energy()*fCGeVCastor_;
-}
-
-if (rh.id().module() == 2){
-energyModule2[isec] = rh.energy()*fCGeVCastor_;
-}
-
-if (rh.id().module() == 3){
-energyModule3[isec] = rh.energy()*fCGeVCastor_;
-}
-
-if (rh.id().module() == 4){
-  energyModule4[isec] = rh.energy()*fCGeVCastor_;
-}
-
-if (rh.id().module() == 5){
-  energyModule5[isec] = rh.energy()*fCGeVCastor_;
-}
-}
-}
-
-}
-
-for (int isec=0;isec<16;isec++){
-  castor_tower.push_back(sumCastorTower[isec]);
-  castor_tower_module1.push_back(energyModule1[isec]);
-  castor_tower_module2.push_back(energyModule2[isec]);
-  castor_tower_module3.push_back(energyModule3[isec]);
-  castor_tower_module4.push_back(energyModule4[isec]);
-  castor_tower_module5.push_back(energyModule5[isec]);
-  if (debug) {
-    std::cout << "Sector "<< isec+1 << ", Module 1, Energy [GeV]: " << energyModule1[isec] << std::endl;
-    std::cout << "Sector "<< isec+1 << ", Module 2, Energy [GeV]: " << energyModule2[isec] << std::endl;
-    std::cout << "Sector "<< isec+1 << ", Module 3, Energy [GeV]: " << energyModule3[isec] << std::endl;
-    std::cout << "Sector "<< isec+1 << ", Module 4, Energy [GeV]: " << energyModule4[isec] << std::endl;
-    std::cout << "Sector "<< isec+1 << ", Module 5, Energy [GeV]: " << energyModule5[isec] << std::endl;
-    std::cout << "Sector "<< isec+1 << ", Total Energy [GeV]: " << sumCastorTower[isec] << std::endl;
-  }
-}
-
-eventData.SetCastorTowerEnergy(castor_tower);
-eventData.SetCastorModule1Energy(castor_tower_module1);
-eventData.SetCastorModule2Energy(castor_tower_module2);
-eventData.SetCastorModule3Energy(castor_tower_module3);
-eventData.SetCastorModule4Energy(castor_tower_module4);
-eventData.SetCastorModule5Energy(castor_tower_module5);
-
-}else{
-  if (debug) std::cout << "There is no Castor valid recHitSector "<< std::cout;
-}
-
-}
-
-void BosonAnalyzer::FillCastorDebug(const edm::Event& iEvent, const edm::EventSetup& iSetup){
-
-  // Phi: 16 modules, rh.id().sector();
-  // Z: 14 modules, rh.id().module();
-  // Channel definition: 16*(rh.id().module()-1) + rh.id().sector();
-  // For 2010, Castor uses only first five modules.
-
-  bool debug = false;
-  bool debug_deep = false;
-
-  int NRecHits = 0;
-  int NRecHitsPartial = 0;
-  int BadChannels = 0;
-
-  edm::Handle<CastorRecHitCollection> CastorRecHits;
-  event.getByLabel(castorRecHitTag_,CastorRecHits);
-
-  if( CastorRecHits.isValid() ){
-
-    for (size_t i = 0; i < CastorRecHits->size(); ++i) {
-
-      const CastorRecHit & rh = (*CastorRecHits)[i];
-      int cha = 16*(rh.id().module()-1) + rh.id().sector();
-
-      CastorChannelHisto_->Fill(cha);
-
-      ++NRecHits;
-      if (rh.id().module() > 5 ) ++NRecHitsPartial;
-
-      if (debug_deep){
-	std::cout << "Channel: " << cha << std::endl;
-      }
-
-    }
-  }else{
-    if (debug) std::cout << "There is no Castor valid recHitSector "<< std::cout;
-  }
-
-}
-
-*/
 
 //define this as a plug-in
 DEFINE_FWK_MODULE(BosonAnalyzer);
