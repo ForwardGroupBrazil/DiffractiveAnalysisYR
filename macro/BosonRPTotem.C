@@ -39,8 +39,12 @@ Goal": obtain some extrapolations
 
 void BosonRPTotem()
 {
+
+  //Parameters
   double lumi = 100; // pb
   double weight = pow(lumi,-1);
+  double XSmc = 1; //pb
+  double EBeam = 6500.;
 
   bool debug = false; // print code output
 
@@ -88,6 +92,8 @@ void BosonRPTotem()
   double ZEtaDiMuon;
   double WEtaElectron;
   double WEtaMuon;
+  double AverageAccept = 0.;
+  double selected = 0.;
 
   TBranch *bprotonLorentzVector;
   TBranch *bLeadingElectronsP4;
@@ -156,6 +162,10 @@ void BosonRPTotem()
   std::vector<TH1F*> hVectorLeptonsPhi;
   std::vector<TH1F*> hVectorLeptonsPt;
   std::vector<TH1F*> hVectorCrossSection;
+  std::vector<TH1F*> hVectorProtonAcceptanceXiMinus;
+  std::vector<TH1F*> hVectorProtonAcceptanceXiPlus;
+  std::vector<TH1F*> hVectorProtonAcceptanceTMinus;
+  std::vector<TH1F*> hVectorProtonAcceptanceTPlus;
 
   std::string step0 = "no_accept_RP";
   std::string step1 = "accept_RP_boson";
@@ -211,10 +221,33 @@ void BosonRPTotem()
     TH1F *hCrossSection = new TH1F(name,"d#sigma/dM; N events",400,0.,400.);
     hVectorCrossSection.push_back(hCrossSection);
 
+    sprintf(name,"ProtonAcceptanceXiMinus_%s",GroupHisto.at(j).c_str());
+    TH1F *hProtonAccXiMinus = new TH1F(name,"#xi; N events",100,0.,1.);
+    hVectorProtonAcceptanceXiMinus.push_back(hProtonAccXiMinus);
+
+    sprintf(name,"ProtonAcceptanceXiPlus_%s",GroupHisto.at(j).c_str());
+    TH1F *hProtonAccXiPlus = new TH1F(name,"#xi; N events",100,0.,1.);
+    hVectorProtonAcceptanceXiPlus.push_back(hProtonAccXiPlus);
+
+    sprintf(name,"ProtonAcceptanceTMinus_%s",GroupHisto.at(j).c_str());
+    TH1F *hProtonAccTMinus = new TH1F(name,"#xi; N events",100,0.,1.);
+    hVectorProtonAcceptanceTMinus.push_back(hProtonAccTMinus);
+
+    sprintf(name,"ProtonAcceptanceTPlus_%s",GroupHisto.at(j).c_str());
+    TH1F *hProtonAccTPlus = new TH1F(name,"#xi; N events",100,0.,1.);
+    hVectorProtonAcceptanceTPlus.push_back(hProtonAccTPlus);
+
   }
 
   unsigned NEntries = tr->GetEntries();
+
+  cout << "\nR U N N I N G" << endl;
   cout << "Reading TREE: "<<NEntries<<" events"<<endl;
+
+  hVectorProtonAcceptanceTPlus.at(0)=HistoRPCMSPlus->ProjectionX();
+  hVectorProtonAcceptanceTMinus.at(0)=HistoRPCMSMinus->ProjectionX();
+  hVectorProtonAcceptanceXiPlus.at(0)=HistoRPCMSPlus->ProjectionY();
+  hVectorProtonAcceptanceXiMinus.at(0)=HistoRPCMSMinus->ProjectionY();
 
   for(int unsigned i=0; i<NEntries; i++) {
 
@@ -252,7 +285,7 @@ void BosonRPTotem()
 
     if (protonLorentzVector->size() == 1){
       if (debug) cout << "--> proton(1) pZ [GeV]: " << protonLorentzVector->at(0).pz() << endl;
-      perc = protonLorentzVector->at(0).pz()/6500.;
+      perc = protonLorentzVector->at(0).pz()/EBeam;
     }
 
     if (protonLorentzVector->size() > 1){
@@ -260,13 +293,13 @@ void BosonRPTotem()
 	cout << "--> proton(1) pZ [GeV]: " << protonLorentzVector->at(0).pz() << endl;
 	cout << "--> proton(2) pZ [GeV]: " << protonLorentzVector->at(1).pz() << endl;
       }
-      perc = protonLorentzVector->at(0).pz()/6500.;
+      perc = protonLorentzVector->at(0).pz()/EBeam;
     }
 
     if (protonLorentzVector->size() > 0 && protonLorentzVector->at(0).pz() > 0. && fabs(perc) > 0.75){
-      xi_proton_plus =  ( 1. - (protonLorentzVector->at(0).pz()/6500.) );
+      xi_proton_plus =  ( 1. - (protonLorentzVector->at(0).pz()/EBeam) );
 
-      TLorentzVector vec_pi(0.,0.,6500.,6500.);
+      TLorentzVector vec_pi(0.,0.,EBeam,EBeam);
       TLorentzVector vec_pf(protonLorentzVector->at(0).px(),protonLorentzVector->at(0).py(),protonLorentzVector->at(0).pz(),protonLorentzVector->at(0).energy());
       TLorentzVector vec_t = (vec_pf - vec_pi);
 
@@ -288,9 +321,9 @@ void BosonRPTotem()
     }
 
     if (protonLorentzVector->size() > 0 && protonLorentzVector->at(0).pz() < 0. && fabs(perc) > 0.75){
-      xi_proton_minus =  ( 1. + (protonLorentzVector->at(0).pz()/6500.) );
+      xi_proton_minus =  ( 1. + (protonLorentzVector->at(0).pz()/EBeam) );
 
-      TLorentzVector vec_pi(0.,0.,-6500.,6500.);
+      TLorentzVector vec_pi(0.,0.,-EBeam,EBeam);
       TLorentzVector vec_pf(protonLorentzVector->at(0).px(),protonLorentzVector->at(0).py(),protonLorentzVector->at(0).pz(),protonLorentzVector->at(0).energy());
       TLorentzVector vec_t = (vec_pf - vec_pi);
 
@@ -403,6 +436,8 @@ void BosonRPTotem()
     }
 
     if(accept > 0 && isolation && candSel && (ZMassMu || ZMassE) && LeadingElectronsP4->size()>1){
+      AverageAccept+=accept;
+      ++selected;
       hVectorProtonEta.at(1)->Fill(protonLorentzVector->at(0).eta(),accept);
       hVectorProtonPz.at(1)->Fill(protonLorentzVector->at(0).pz(),accept);
       hVectorProtonEnergy.at(1)->Fill(protonLorentzVector->at(0).energy(),accept);
@@ -444,10 +479,19 @@ void BosonRPTotem()
   hVectorLeptonsPhi[1]->Write();
   hVectorLeptonsPt[1]->Write();
   hVectorCrossSection[1]->Write();
+  hVectorProtonAcceptanceTPlus[0]->Write();
+  hVectorProtonAcceptanceTMinus[0]->Write();
+  hVectorProtonAcceptanceXiPlus[0]->Write();
+  hVectorProtonAcceptanceXiMinus[0]->Write();
 
   out->Close();
   inf->Close();
   RPFileCMSMinus->Close();
   RPFileCMSPlus->Close();
+
+  cout << "\nS U M M A R Y" << endl;
+  cout << "Total Selected Events: " << selected << endl;
+  cout << "Average Acceptance: " << AverageAccept/selected << endl;
+  cout << "Visible Cross Section: " << (XSmc*selected)/NEntries << "\n" << endl;
 
 }
