@@ -120,9 +120,7 @@ process.BosonAnalyzer = cms.EDAnalyzer('BosonAnalyzer',
                                debug = cms.bool(config.debug),
                                electronTag = cms.InputTag("gsfElectrons"),
                                muonTag = cms.InputTag("muons"),
-                               metTag = cms.InputTag("pfMet"),
-                               accessCastorInfo = cms.bool(False),
-                               castorRecHitTag = cms.InputTag("castoreco")
+                               metTag = cms.InputTag("pfMet")
 )
 
 # TFileService.
