@@ -52,14 +52,14 @@ if options.Run == "bosonZ":
   print(">> Running: BosonZ")
   print("")
   bosonZ = True
-  fileout = 'bosonZ.root'
+  fileout = 'out.root'
 
 elif options.Run == "bosonW":
   print("")
   print(">> Running: BosonW")
   print("")
   bosonW = True
-  fileout = 'bosonW.root'
+  fileout = 'out.root'
 
 else:
   print("")
@@ -120,7 +120,9 @@ process.BosonAnalyzer = cms.EDAnalyzer('BosonAnalyzer',
                                debug = cms.bool(config.debug),
                                electronTag = cms.InputTag("gsfElectrons"),
                                muonTag = cms.InputTag("muons"),
-                               metTag = cms.InputTag("pfMet")
+                               metTag = cms.InputTag("pfMet"),
+                               accessCastorInfo = cms.bool(False),
+                               castorRecHitTag = cms.InputTag("castoreco")
 )
 
 # TFileService.
