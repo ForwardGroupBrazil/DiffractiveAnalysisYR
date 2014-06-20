@@ -43,7 +43,8 @@ void BosonRPTotem()
   //Parameters
   double lumi = 100; // pb
   double weight = pow(lumi,-1);
-  double XSmc = 1; //pb
+  double XSmcW = 1; //pb
+  double XSmcZ = 1; //pb
   double EBeam = 6500.;
 
   bool debug = false; // print code output
@@ -92,8 +93,10 @@ void BosonRPTotem()
   double ZEtaDiMuon;
   double WEtaElectron;
   double WEtaMuon;
-  double AverageAccept = 0.;
-  double selected = 0.;
+  double AverageAcceptW = 0.;
+  double AverageAcceptZ = 0.;
+  double selectedW = 0.;
+  double selectedZ = 0.;
 
   TBranch *bprotonLorentzVector;
   TBranch *bLeadingElectronsP4;
@@ -166,6 +169,7 @@ void BosonRPTotem()
   std::vector<TH1F*> hVectorProtonAcceptanceXiPlus;
   std::vector<TH1F*> hVectorProtonAcceptanceTMinus;
   std::vector<TH1F*> hVectorProtonAcceptanceTPlus;
+  std::vector<TH1F*> hVectorAccept;
 
   std::string step0 = "no_accept_RP";
   std::string step1 = "accept_RP_boson";
@@ -178,64 +182,68 @@ void BosonRPTotem()
   for (std::vector<std::string>::size_type j=0; j<GroupHisto.size(); j++){
     char name[300];
     sprintf(name,"ProtonEta_%s",GroupHisto.at(j).c_str());
-    TH1F *hProtonEta = new TH1F(name,"#eta; N events",100,-15,15);
+    TH1F *hProtonEta = new TH1F(name,";#eta; N events",100,-15,15);
     hVectorProtonEta.push_back(hProtonEta);
 
     sprintf(name,"ProtonPz_%s",GroupHisto.at(j).c_str());
-    TH1F *hProtonPz = new TH1F(name,"#P_{Z} [GeV]; N events",14000,-7000.,7000.);
+    TH1F *hProtonPz = new TH1F(name,";p_{z} [GeV]; N events",14000,-7000.,7000.);
     hVectorProtonPz.push_back(hProtonPz);
 
     sprintf(name,"ProtonEnergy_%s",GroupHisto.at(j).c_str());
-    TH1F *hProtonEnergy = new TH1F(name,"Energy [GeV]; N events",7000,0.,7000.);
+    TH1F *hProtonEnergy = new TH1F(name,";Energy [GeV]; N events",7000,0.,7000.);
     hVectorProtonEnergy.push_back(hProtonEnergy);
 
     sprintf(name,"ProtonXi_%s",GroupHisto.at(j).c_str());
-    TH1F *hProtonXi = new TH1F(name,"#xi; N events",100,0.,1.);
+    TH1F *hProtonXi = new TH1F(name,";#xi; N events",100,0.,1.);
     hVectorProtonXi.push_back(hProtonXi);
 
     sprintf(name,"ProtonT_%s",GroupHisto.at(j).c_str());
-    TH1F *hProtonT = new TH1F(name,"|t|; N events",100,0.,1.);
+    TH1F *hProtonT = new TH1F(name,";|t|; N events",100,0.,1.);
     hVectorProtonT.push_back(hProtonT);
 
     sprintf(name,"BosonM_%s",GroupHisto.at(j).c_str());
-    TH1F *hBosonM = new TH1F(name,"Mass; N events",500,0.,500.);
+    TH1F *hBosonM = new TH1F(name,";Mass; N events",500,0.,500.);
     hVectorBosonM.push_back(hBosonM);
 
     sprintf(name,"BosonEta_%s",GroupHisto.at(j).c_str());
-    TH1F *hBosonEta = new TH1F(name,"#eta; N events",100,-6.,6.);
+    TH1F *hBosonEta = new TH1F(name,";#eta; N events",100,-6.,6.);
     hVectorBosonEta.push_back(hBosonEta);
 
     sprintf(name,"LeptonsEta_%s",GroupHisto.at(j).c_str());
-    TH1F *hLeptonsEta = new TH1F(name,"#eta; N events",100,-6.,6.);
+    TH1F *hLeptonsEta = new TH1F(name,";#eta; N events",100,-6.,6.);
     hVectorLeptonsEta.push_back(hLeptonsEta);
 
     sprintf(name,"LeptonsPhi_%s",GroupHisto.at(j).c_str());
-    TH1F *hLeptonsPhi = new TH1F(name,"#phi; N events",100,-4.,4.);
+    TH1F *hLeptonsPhi = new TH1F(name,";#phi; N events",100,-4.,4.);
     hVectorLeptonsPhi.push_back(hLeptonsPhi);
 
     sprintf(name,"LeptonsPt_%s",GroupHisto.at(j).c_str());
-    TH1F *hLeptonsPt = new TH1F(name,"p_{T}; N events",400,0.,400.);
+    TH1F *hLeptonsPt = new TH1F(name,";p_{T} [GeV]; N events",400,0.,400.);
     hVectorLeptonsPt.push_back(hLeptonsPt);
 
     sprintf(name,"CrossSection_%s",GroupHisto.at(j).c_str());
-    TH1F *hCrossSection = new TH1F(name,"d#sigma/dM; N events",400,0.,400.);
+    TH1F *hCrossSection = new TH1F(name,";d#sigma/dM; N events",400,0.,400.);
     hVectorCrossSection.push_back(hCrossSection);
 
     sprintf(name,"ProtonAcceptanceXiMinus_%s",GroupHisto.at(j).c_str());
-    TH1F *hProtonAccXiMinus = new TH1F(name,"#xi; N events",100,0.,1.);
+    TH1F *hProtonAccXiMinus = new TH1F(name,";#xi; N events",50,0.,1.);
     hVectorProtonAcceptanceXiMinus.push_back(hProtonAccXiMinus);
 
     sprintf(name,"ProtonAcceptanceXiPlus_%s",GroupHisto.at(j).c_str());
-    TH1F *hProtonAccXiPlus = new TH1F(name,"#xi; N events",100,0.,1.);
+    TH1F *hProtonAccXiPlus = new TH1F(name,";#xi; N events",50,0.,1.);
     hVectorProtonAcceptanceXiPlus.push_back(hProtonAccXiPlus);
 
     sprintf(name,"ProtonAcceptanceTMinus_%s",GroupHisto.at(j).c_str());
-    TH1F *hProtonAccTMinus = new TH1F(name,"#xi; N events",100,0.,1.);
+    TH1F *hProtonAccTMinus = new TH1F(name,";|t|; N events",50,0.,1.);
     hVectorProtonAcceptanceTMinus.push_back(hProtonAccTMinus);
 
     sprintf(name,"ProtonAcceptanceTPlus_%s",GroupHisto.at(j).c_str());
-    TH1F *hProtonAccTPlus = new TH1F(name,"#xi; N events",100,0.,1.);
+    TH1F *hProtonAccTPlus = new TH1F(name,";|t|; N events",50,0.,1.);
     hVectorProtonAcceptanceTPlus.push_back(hProtonAccTPlus);
+
+    sprintf(name,"Acceptance_%s",GroupHisto.at(j).c_str());
+    TH1F *hAccept = new TH1F(name,";N_{RP}/N_{GEN}; N events",100,0.,1.);
+    hVectorAccept.push_back(hAccept);
 
   }
 
@@ -248,6 +256,21 @@ void BosonRPTotem()
   hVectorProtonAcceptanceTMinus.at(0)=HistoRPCMSMinus->ProjectionX();
   hVectorProtonAcceptanceXiPlus.at(0)=HistoRPCMSPlus->ProjectionY();
   hVectorProtonAcceptanceXiMinus.at(0)=HistoRPCMSMinus->ProjectionY();
+
+  hVectorProtonAcceptanceTPlus.at(0)->SetTitle("");
+  hVectorProtonAcceptanceTMinus.at(0)->SetTitle("");
+  hVectorProtonAcceptanceXiPlus.at(0)->SetTitle("");
+  hVectorProtonAcceptanceXiMinus.at(0)->SetTitle("");
+
+  hVectorProtonAcceptanceTPlus.at(0)->GetXaxis()->SetTitle("|t|, RP^{CMS, +} acceptance");
+  hVectorProtonAcceptanceTMinus.at(0)->GetXaxis()->SetTitle("|t|, RP^{CMS, -} acceptance");
+  hVectorProtonAcceptanceXiPlus.at(0)->GetXaxis()->SetTitle("#xi, RP^{CMS, +} acceptance");
+  hVectorProtonAcceptanceXiMinus.at(0)->GetXaxis()->SetTitle("#xi, RP^{CMS, -} acceptance");
+
+  hVectorProtonAcceptanceTPlus.at(0)->SetName("TMatrixAcceptanceRPPlus");
+  hVectorProtonAcceptanceTMinus.at(0)->SetName("TMatrixAcceptanceRPMinus");
+  hVectorProtonAcceptanceXiPlus.at(0)->SetName("XiMatrixAcceptanceRPPlus");
+  hVectorProtonAcceptanceXiMinus.at(0)->SetName("XiMatrixAcceptanceRPMinus");
 
   for(int unsigned i=0; i<NEntries; i++) {
 
@@ -281,6 +304,14 @@ void BosonRPTotem()
     bool ZFillE = false;
     bool WFillE = false;
 
+    bool protonMinus = false;
+    bool protonPlus = false;
+
+    bool acceptZE = false;
+    bool acceptZMu = false;
+    bool acceptWE = false;
+    bool acceptWMu = false;
+
     if (debug) std::cout << ">> EVENT " << i << " <<"  <<endl;
 
     if (protonLorentzVector->size() == 1){
@@ -297,6 +328,7 @@ void BosonRPTotem()
     }
 
     if (protonLorentzVector->size() > 0 && protonLorentzVector->at(0).pz() > 0. && fabs(perc) > 0.75){
+      protonPlus = true;
       xi_proton_plus =  ( 1. - (protonLorentzVector->at(0).pz()/EBeam) );
 
       TLorentzVector vec_pi(0.,0.,EBeam,EBeam);
@@ -321,6 +353,7 @@ void BosonRPTotem()
     }
 
     if (protonLorentzVector->size() > 0 && protonLorentzVector->at(0).pz() < 0. && fabs(perc) > 0.75){
+      protonMinus = true;
       xi_proton_minus =  ( 1. + (protonLorentzVector->at(0).pz()/EBeam) );
 
       TLorentzVector vec_pi(0.,0.,-EBeam,EBeam);
@@ -346,8 +379,8 @@ void BosonRPTotem()
 
     if (debug) cout << "-- END --\n" << endl;
 
-    if (ZMassDiElectron > 60. && ZMassDiElectron < 110. ) ZMassE = true;
-    if (ZMassDiMuon > 60. && ZMassDiMuon < 110. ) ZMassMu = true;
+    if (ZMassDiElectron > 60. && ZMassDiElectron < 110.) ZMassE = true;
+    if (ZMassDiMuon > 60. && ZMassDiMuon < 110.) ZMassMu = true;
     if (WMassElectron > 60. && WMassElectron < 110.) WMassE = true;
     if (WMassMuon > 60. && WMassMuon < 110.) WMassMu = true;
 
@@ -435,9 +468,32 @@ void BosonRPTotem()
       }
     }
 
-    if(accept > 0 && isolation && candSel && (ZMassMu || ZMassE) && LeadingElectronsP4->size()>1){
-      AverageAccept+=accept;
-      ++selected;
+    // Fill Acceptance Histogram
+    hVectorAccept.at(0)->Fill(accept);
+
+    if (WFillMu && LeadingMuonsP4->size() > 0 && METP4->size()>0){
+      if (LeadingMuonsP4->at(0).pt() > 20 && METP4->at(0).pt() > 20.) acceptWMu = true;
+    }
+
+    if (WFillE && LeadingElectronsP4->size() > 0 && METP4->size()>0){
+      if (LeadingElectronsP4->at(0).pt() > 20 && METP4->at(0).pt() > 20.) acceptWE = true;
+    }
+
+    if (ZFillMu && LeadingMuonsP4->size() > 1){
+      if(LeadingMuonsP4->at(0).pt() > 20 && LeadingMuonsP4->at(1).pt() > 20) acceptZMu = true;
+    }
+
+    if (ZFillE && LeadingElectronsP4->size() > 1){
+      if(LeadingElectronsP4->at(0).pt() > 20 && LeadingElectronsP4->at(1).pt() > 20) acceptZE = true;
+    }
+
+    // W Boson, Proton Minus
+    if(protonMinus && accept > 0 && isolation && candSel && (acceptWMu || acceptWE) ){
+
+      AverageAcceptW+=accept;
+      ++selectedW;
+
+      hVectorAccept.at(1)->Fill(accept);
       hVectorProtonEta.at(1)->Fill(protonLorentzVector->at(0).eta(),accept);
       hVectorProtonPz.at(1)->Fill(protonLorentzVector->at(0).pz(),accept);
       hVectorProtonEnergy.at(1)->Fill(protonLorentzVector->at(0).energy(),accept);
@@ -445,19 +501,143 @@ void BosonRPTotem()
       if(xi_proton_plus > -999.) hVectorProtonXi.at(1)->Fill(xi_proton_plus,accept);
       if(t_proton_minus > -999.) hVectorProtonT.at(1)->Fill(fabs(t_proton_minus),accept);
       if(t_proton_plus > -999.) hVectorProtonT.at(1)->Fill(fabs(t_proton_plus),accept);
-      if (ZMassDiElectron > ZMassDiMuon) hVectorBosonM.at(1)->Fill(ZMassDiElectron,accept);
-      if (ZMassDiElectron < ZMassDiMuon)  hVectorBosonM.at(1)->Fill(ZMassDiMuon,accept);
-      hVectorBosonEta.at(1)->Fill(ZEtaDiElectron,accept);
-      hVectorBosonEta.at(1)->Fill(ZEtaDiMuon,accept);
-      hVectorLeptonsEta.at(1)->Fill(LeadingElectronsP4->at(0).eta(),accept);
-      hVectorLeptonsEta.at(1)->Fill(LeadingElectronsP4->at(1).eta(),accept);
-      hVectorLeptonsPhi.at(1)->Fill(LeadingElectronsP4->at(0).phi(),accept);
-      hVectorLeptonsPhi.at(1)->Fill(LeadingElectronsP4->at(1).phi(),accept);
-      hVectorLeptonsPt.at(1)->Fill(LeadingElectronsP4->at(0).pt(),accept);
-      hVectorLeptonsPt.at(1)->Fill(LeadingElectronsP4->at(1).pt(),accept);
-      if (ZMassDiElectron > ZMassDiMuon) hVectorCrossSection.at(1)->Fill(ZMassDiElectron,accept);
-      if (ZMassDiElectron < ZMassDiMuon) hVectorCrossSection.at(1)->Fill(ZMassDiMuon,accept);
+
+      if (acceptWE){
+	hVectorBosonM.at(1)->Fill(WMassElectron,accept);
+	hVectorBosonEta.at(1)->Fill(WEtaElectron,accept);
+	hVectorLeptonsEta.at(1)->Fill(LeadingElectronsP4->at(0).eta(),accept);
+	hVectorLeptonsPhi.at(1)->Fill(LeadingElectronsP4->at(0).phi(),accept);
+	hVectorLeptonsPhi.at(1)->Fill(METP4->at(0).phi(),accept);
+	hVectorLeptonsPt.at(1)->Fill(LeadingElectronsP4->at(0).pt(),accept);
+	hVectorLeptonsPt.at(1)->Fill(METP4->at(0).pt(),accept);
+	hVectorCrossSection.at(1)->Fill(WMassElectron,accept);
+      }
+      if(acceptWMu){
+	hVectorBosonM.at(1)->Fill(WMassMuon,accept);
+	hVectorBosonEta.at(1)->Fill(WEtaMuon,accept);
+	hVectorLeptonsEta.at(1)->Fill(LeadingMuonsP4->at(0).eta(),accept);
+	hVectorLeptonsPhi.at(1)->Fill(LeadingMuonsP4->at(0).phi(),accept);
+	hVectorLeptonsPhi.at(1)->Fill(METP4->at(0).phi(),accept);
+	hVectorLeptonsPt.at(1)->Fill(LeadingMuonsP4->at(0).pt(),accept);
+	hVectorLeptonsPt.at(1)->Fill(METP4->at(0).pt(),accept);
+	hVectorCrossSection.at(1)->Fill(WMassMuon,accept);
+      }
     }
+
+    // W Boson, Proton Plus
+    if(protonPlus && accept > 0 && isolation && candSel && (acceptWMu || acceptWE) ){
+
+      AverageAcceptW+=accept;
+      ++selectedW;
+      hVectorAccept.at(1)->Fill(accept);
+      hVectorProtonEta.at(1)->Fill(protonLorentzVector->at(0).eta(),accept);
+      hVectorProtonPz.at(1)->Fill(protonLorentzVector->at(0).pz(),accept);
+      hVectorProtonEnergy.at(1)->Fill(protonLorentzVector->at(0).energy(),accept);
+      if(xi_proton_minus > -999.) hVectorProtonXi.at(1)->Fill(xi_proton_minus,accept);
+      if(xi_proton_plus > -999.) hVectorProtonXi.at(1)->Fill(xi_proton_plus,accept);
+      if(t_proton_minus > -999.) hVectorProtonT.at(1)->Fill(fabs(t_proton_minus),accept);
+      if(t_proton_plus > -999.) hVectorProtonT.at(1)->Fill(fabs(t_proton_plus),accept);
+
+      if (acceptWE){
+	hVectorBosonM.at(1)->Fill(WMassElectron,accept);
+	hVectorBosonEta.at(1)->Fill(WEtaElectron,accept);
+	hVectorLeptonsEta.at(1)->Fill(LeadingElectronsP4->at(0).eta(),accept);
+	hVectorLeptonsPhi.at(1)->Fill(LeadingElectronsP4->at(0).phi(),accept);
+	hVectorLeptonsPhi.at(1)->Fill(METP4->at(0).phi(),accept);
+	hVectorLeptonsPt.at(1)->Fill(LeadingElectronsP4->at(0).pt(),accept);
+	hVectorLeptonsPt.at(1)->Fill(METP4->at(0).pt(),accept);
+	hVectorCrossSection.at(1)->Fill(WMassElectron,accept);
+      }
+      if(acceptWMu){
+	hVectorBosonM.at(1)->Fill(WMassMuon,accept);
+	hVectorBosonEta.at(1)->Fill(WEtaMuon,accept);
+	hVectorLeptonsEta.at(1)->Fill(LeadingMuonsP4->at(0).eta(),accept);
+	hVectorLeptonsPhi.at(1)->Fill(LeadingMuonsP4->at(0).phi(),accept);
+	hVectorLeptonsPhi.at(1)->Fill(METP4->at(0).phi(),accept);
+	hVectorLeptonsPt.at(1)->Fill(LeadingMuonsP4->at(0).pt(),accept);
+	hVectorLeptonsPt.at(1)->Fill(METP4->at(0).pt(),accept);
+	hVectorCrossSection.at(1)->Fill(WMassMuon,accept);
+      }        
+    }
+
+    // Z Boson, Proton Minus
+    if(protonMinus && accept > 0 && isolation && candSel && (acceptZMu || acceptZE)){
+
+      AverageAcceptZ+=accept;
+      ++selectedZ;
+
+      hVectorAccept.at(1)->Fill(accept);
+      hVectorProtonEta.at(1)->Fill(protonLorentzVector->at(0).eta(),accept);
+      hVectorProtonPz.at(1)->Fill(protonLorentzVector->at(0).pz(),accept);
+      hVectorProtonEnergy.at(1)->Fill(protonLorentzVector->at(0).energy(),accept);
+      if(xi_proton_minus > -999.) hVectorProtonXi.at(1)->Fill(xi_proton_minus,accept);
+      if(xi_proton_plus > -999.) hVectorProtonXi.at(1)->Fill(xi_proton_plus,accept);
+      if(t_proton_minus > -999.) hVectorProtonT.at(1)->Fill(fabs(t_proton_minus),accept);
+      if(t_proton_plus > -999.) hVectorProtonT.at(1)->Fill(fabs(t_proton_plus),accept);
+
+      if (acceptZE){
+	hVectorBosonM.at(1)->Fill(ZMassDiElectron,accept);
+	hVectorBosonEta.at(1)->Fill(ZEtaDiElectron,accept);
+	hVectorLeptonsEta.at(1)->Fill(LeadingElectronsP4->at(0).eta(),accept);
+	hVectorLeptonsEta.at(1)->Fill(LeadingElectronsP4->at(1).eta(),accept);
+	hVectorLeptonsPhi.at(1)->Fill(LeadingElectronsP4->at(0).phi(),accept);
+	hVectorLeptonsPhi.at(1)->Fill(LeadingElectronsP4->at(1).phi(),accept);
+	hVectorLeptonsPt.at(1)->Fill(LeadingElectronsP4->at(0).pt(),accept);
+	hVectorLeptonsPt.at(1)->Fill(LeadingElectronsP4->at(1).pt(),accept);
+	hVectorCrossSection.at(1)->Fill(ZMassDiElectron,accept);
+      }
+      if(acceptZMu){
+	hVectorBosonM.at(1)->Fill(ZMassDiMuon,accept);
+	hVectorBosonEta.at(1)->Fill(ZEtaDiMuon,accept);
+	hVectorLeptonsEta.at(1)->Fill(LeadingMuonsP4->at(0).eta(),accept);
+	hVectorLeptonsEta.at(1)->Fill(LeadingMuonsP4->at(1).eta(),accept);
+	hVectorLeptonsPhi.at(1)->Fill(LeadingMuonsP4->at(0).phi(),accept);
+	hVectorLeptonsPhi.at(1)->Fill(LeadingMuonsP4->at(1).phi(),accept);
+	hVectorLeptonsPt.at(1)->Fill(LeadingMuonsP4->at(0).pt(),accept);
+	hVectorLeptonsPt.at(1)->Fill(LeadingMuonsP4->at(1).pt(),accept);
+	hVectorCrossSection.at(1)->Fill(ZMassDiMuon,accept);
+      }
+    }
+
+    // Z Boson, Proton Plus
+    if(protonPlus && accept > 0 && isolation && candSel && (acceptZMu || acceptZE) ){
+
+      AverageAcceptZ+=accept;
+      ++selectedZ;
+
+      hVectorAccept.at(1)->Fill(accept);
+      hVectorProtonEta.at(1)->Fill(protonLorentzVector->at(0).eta(),accept);
+      hVectorProtonPz.at(1)->Fill(protonLorentzVector->at(0).pz(),accept);
+      hVectorProtonEnergy.at(1)->Fill(protonLorentzVector->at(0).energy(),accept);
+      if(xi_proton_minus > -999.) hVectorProtonXi.at(1)->Fill(xi_proton_minus,accept);
+      if(xi_proton_plus > -999.) hVectorProtonXi.at(1)->Fill(xi_proton_plus,accept);
+      if(t_proton_minus > -999.) hVectorProtonT.at(1)->Fill(fabs(t_proton_minus),accept);
+      if(t_proton_plus > -999.) hVectorProtonT.at(1)->Fill(fabs(t_proton_plus),accept);
+
+      if (acceptZE){
+	hVectorBosonM.at(1)->Fill(ZMassDiElectron,accept);
+	hVectorBosonEta.at(1)->Fill(ZEtaDiElectron,accept);
+	hVectorLeptonsEta.at(1)->Fill(LeadingElectronsP4->at(0).eta(),accept);
+	hVectorLeptonsEta.at(1)->Fill(LeadingElectronsP4->at(1).eta(),accept);
+	hVectorLeptonsPhi.at(1)->Fill(LeadingElectronsP4->at(0).phi(),accept);
+	hVectorLeptonsPhi.at(1)->Fill(LeadingElectronsP4->at(1).phi(),accept);
+	hVectorLeptonsPt.at(1)->Fill(LeadingElectronsP4->at(0).pt(),accept);
+	hVectorLeptonsPt.at(1)->Fill(LeadingElectronsP4->at(1).pt(),accept);
+	hVectorCrossSection.at(1)->Fill(ZMassDiElectron,accept);
+      }
+      if(acceptZMu){
+	hVectorBosonM.at(1)->Fill(ZMassDiMuon,accept);
+	hVectorBosonEta.at(1)->Fill(ZEtaDiMuon,accept);
+	hVectorLeptonsEta.at(1)->Fill(LeadingMuonsP4->at(0).eta(),accept);
+	hVectorLeptonsEta.at(1)->Fill(LeadingMuonsP4->at(1).eta(),accept);
+	hVectorLeptonsPhi.at(1)->Fill(LeadingMuonsP4->at(0).phi(),accept);
+	hVectorLeptonsPhi.at(1)->Fill(LeadingMuonsP4->at(1).phi(),accept);
+	hVectorLeptonsPt.at(1)->Fill(LeadingMuonsP4->at(0).pt(),accept);
+	hVectorLeptonsPt.at(1)->Fill(LeadingMuonsP4->at(1).pt(),accept);
+	hVectorCrossSection.at(1)->Fill(ZMassDiMuon,accept);
+      }
+    }
+
   }
 
   hVectorCrossSection[1]->Scale(weight,"width");
@@ -483,6 +663,8 @@ void BosonRPTotem()
   hVectorProtonAcceptanceTMinus[0]->Write();
   hVectorProtonAcceptanceXiPlus[0]->Write();
   hVectorProtonAcceptanceXiMinus[0]->Write();
+  hVectorAccept[0]->Write();
+  hVectorAccept[1]->Write();
 
   out->Close();
   inf->Close();
@@ -490,8 +672,14 @@ void BosonRPTotem()
   RPFileCMSPlus->Close();
 
   cout << "\nS U M M A R Y" << endl;
-  cout << "Total Selected Events: " << selected << endl;
-  cout << "Average Acceptance: " << AverageAccept/selected << endl;
-  cout << "Visible Cross Section: " << (XSmc*selected)/NEntries << "\n" << endl;
+  cout << "--> Boson W: " << endl;
+  cout << "Total Selected Events W: " << selectedW << endl;
+  if(selectedW > 0) cout << "Average Acceptance for W: " << AverageAcceptW/selectedW << endl;
+  cout << "Visible Cross Section for W: " << (XSmcW*selectedW)/NEntries << endl;
+  cout << "\n--> Boson Z: " << endl;
+  cout << "Total Selected Events Z: " << selectedZ << endl;
+  if(selectedZ > 0) cout << "Average Acceptance for Z: " << AverageAcceptZ/selectedZ << endl;
+  cout << "Visible Cross Section for Z: " << (XSmcZ*selectedZ)/NEntries << "\n" << endl;
 
 }
+
