@@ -93,8 +93,8 @@ void BosonRPTotem()
   double ZEtaDiMuon;
   double WEtaElectron;
   double WEtaMuon;
-  double AverageAcceptW = 0.;
-  double AverageAcceptZ = 0.;
+  double AcceptW = 0.;
+  double AcceptZ = 0.;
   double selectedW = 0.;
   double selectedZ = 0.;
 
@@ -490,7 +490,7 @@ void BosonRPTotem()
     // W Boson, Proton Minus
     if(protonMinus && accept > 0 && isolation && candSel && (acceptWMu || acceptWE) ){
 
-      AverageAcceptW+=accept;
+      AcceptW+=accept;
       ++selectedW;
 
       hVectorAccept.at(1)->Fill(accept);
@@ -527,8 +527,9 @@ void BosonRPTotem()
     // W Boson, Proton Plus
     if(protonPlus && accept > 0 && isolation && candSel && (acceptWMu || acceptWE) ){
 
-      AverageAcceptW+=accept;
+      AcceptW+=accept;
       ++selectedW;
+
       hVectorAccept.at(1)->Fill(accept);
       hVectorProtonEta.at(1)->Fill(protonLorentzVector->at(0).eta(),accept);
       hVectorProtonPz.at(1)->Fill(protonLorentzVector->at(0).pz(),accept);
@@ -563,7 +564,7 @@ void BosonRPTotem()
     // Z Boson, Proton Minus
     if(protonMinus && accept > 0 && isolation && candSel && (acceptZMu || acceptZE)){
 
-      AverageAcceptZ+=accept;
+      AcceptZ+=accept;
       ++selectedZ;
 
       hVectorAccept.at(1)->Fill(accept);
@@ -602,7 +603,7 @@ void BosonRPTotem()
     // Z Boson, Proton Plus
     if(protonPlus && accept > 0 && isolation && candSel && (acceptZMu || acceptZE) ){
 
-      AverageAcceptZ+=accept;
+      AcceptZ+=accept;
       ++selectedZ;
 
       hVectorAccept.at(1)->Fill(accept);
@@ -673,13 +674,13 @@ void BosonRPTotem()
 
   cout << "\nS U M M A R Y" << endl;
   cout << "--> Boson W: " << endl;
-  cout << "Total Selected Events W: " << selectedW << endl;
-  if(selectedW > 0) cout << "Average Acceptance for W: " << AverageAcceptW/selectedW << endl;
-  cout << "Visible Cross Section for W: " << (XSmcW*selectedW)/NEntries << endl;
+  cout << "Total Selected Events W (not normalized): " << selectedW << endl;
+  if(selectedW > 0) cout << "Average Acceptance for W: " << AcceptW/selectedW << endl;
+  cout << "Visible Cross Section for W, weighted: " << (XSmcW*AcceptW)/NEntries << endl;
   cout << "\n--> Boson Z: " << endl;
-  cout << "Total Selected Events Z: " << selectedZ << endl;
-  if(selectedZ > 0) cout << "Average Acceptance for Z: " << AverageAcceptZ/selectedZ << endl;
-  cout << "Visible Cross Section for Z: " << (XSmcZ*selectedZ)/NEntries << "\n" << endl;
+  cout << "Total Selected Events Z (not normalized): " << selectedZ << endl;
+  if(selectedZ > 0) cout << "Average Acceptance for Z: " << AcceptZ/selectedZ << endl;
+  cout << "Visible Cross Section for Z, weighted: " << (XSmcZ*AcceptZ)/NEntries << "\n" << endl;
 
 }
 
