@@ -71,6 +71,9 @@ void BosonRPTotem(string inputfile, string outputfile,double XSmcW, double XSmcZ
   TH2F *HistoRPCMSMinus = (TH2F*)RPFileCMSMinus->Get("accep_xi_vs_t_right");
   TH2F *HistoRPCMSPlus = (TH2F*)RPFileCMSPlus->Get("accep_xi_vs_t_left");
 
+  TH1::SetDefaultSumw2(true);
+  TH2::SetDefaultSumw2(true);
+
   //----------- define the tree branch --------
   std::vector <ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double> > > *protonLorentzVector;
   std::vector <ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double> > > *LeadingElectronsP4;
