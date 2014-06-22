@@ -15,6 +15,7 @@ Goal": obtain some extrapolations
 #include <sstream>
 #include <map>
 #include <cmath>
+#include <fstream>
 
 // root
 #include <TROOT.h>
@@ -37,14 +38,15 @@ Goal": obtain some extrapolations
 
 #define PI 3.141592653589793
 
-void BosonRPTotem()
+void BosonRPTotem(string inputfile, string outputfile,double XSmcW, double XSmcZ, double lumi)
 {
 
   //Parameters
-  double lumi = 100; // pb
+  // Lumi = luminosity [pb-1]
+  // XSmcW = cross section W 
+  // XSmcZ = cross section Z (same leptonic channel W)
+
   double weight = pow(lumi,-1);
-  double XSmcW = 1; //pb
-  double XSmcZ = 1; //pb
   double EBeam = 6500.;
 
   bool debug = false; // print code output
@@ -55,9 +57,13 @@ void BosonRPTotem()
   gROOT->ProcessLine("#include<vector>");
 
   //------------ files -----------------
-  TFile *inf  = TFile::Open("out.root");
-  TFile *out = TFile::Open("OutHisto.root","RECREATE");
+  TFile *inf  = TFile::Open(inputfile.c_str());
+  TFile *out = TFile::Open(outputfile.c_str(),"RECREATE");
   TTree *tr = (TTree*)inf->Get("BosonAnalyzer/Event");
+
+  TString outtxt = outputfile;
+  outtxt.ReplaceAll("root","txt");
+  std::ofstream outstring(outtxt);
 
   TFile *RPFileCMSMinus = TFile::Open("matrix_xi_vs_t_right.root");
   TFile *RPFileCMSPlus  = TFile::Open("matrix_xi_vs_t_left.root");
@@ -251,6 +257,11 @@ void BosonRPTotem()
 
   cout << "\nR U N N I N G" << endl;
   cout << "Reading TREE: "<<NEntries<<" events"<<endl;
+  cout << "Input filename: " << inputfile << endl;
+  cout << "Output filename: " << outputfile << endl;
+  cout << "Integrated Luminosity: " << lumi << endl;
+  cout << "Cross Section MC W: " << XSmcW << endl;
+  cout << "Cross Section MC Z(same channel above): " << XSmcZ << "\n" << endl;
 
   hVectorProtonAcceptanceTPlus.at(0)=HistoRPCMSPlus->ProjectionX();
   hVectorProtonAcceptanceTMinus.at(0)=HistoRPCMSMinus->ProjectionX();
@@ -272,9 +283,17 @@ void BosonRPTotem()
   hVectorProtonAcceptanceXiPlus.at(0)->SetName("XiMatrixAcceptanceRPPlus");
   hVectorProtonAcceptanceXiMinus.at(0)->SetName("XiMatrixAcceptanceRPMinus");
 
+  int decade = 0;
+
   for(int unsigned i=0; i<NEntries; i++) {
 
     tr->GetEntry(i);
+
+    double progress = 10.0*i/(1.0*NEntries);
+    Int_t k = TMath::FloorNint(progress);
+    if (k > decade)
+      cout<<10*k<<" %"<<endl;
+    decade = k; 
 
     double perc = -999;
     double xi_proton_plus = -999.;
@@ -681,6 +700,25 @@ void BosonRPTotem()
   cout << "Total Selected Events Z (not normalized): " << selectedZ << endl;
   if(selectedZ > 0) cout << "Average Acceptance for Z: " << AcceptZ/selectedZ << endl;
   cout << "Visible Cross Section for Z, weighted: " << (XSmcZ*AcceptZ)/NEntries << "\n" << endl;
+
+  // Saving Text File
+
+  outstring << "\nI N P U T S" << endl;
+  outstring << "Reading TREE: "<<NEntries<<" events"<<endl;
+  outstring << "Input filename: " << inputfile << endl;
+  outstring << "Output filename: " << outputfile << endl;
+  outstring << "Integrated Luminosity: " << lumi << endl;
+  outstring << "Cross Section MC W: " << XSmcW << endl;
+  outstring << "Cross Section MC Z(same channel above): " << XSmcZ << endl;
+  outstring << "\nS U M M A R Y" << endl;
+  outstring << "--> Boson W: " << endl;
+  outstring << "Total Selected Events W (not normalized): " << selectedW << endl;
+  if(selectedW > 0) outstring << "Average Acceptance for W: " << AcceptW/selectedW << endl;
+  outstring << "Visible Cross Section for W, weighted: " << (XSmcW*AcceptW)/NEntries << endl;
+  outstring << "\n--> Boson Z: " << endl;
+  outstring << "Total Selected Events Z (not normalized): " << selectedZ << endl;
+  if(selectedZ > 0) outstring << "Average Acceptance for Z: " << AcceptZ/selectedZ << endl;
+  outstring << "Visible Cross Section for Z, weighted: " << (XSmcZ*AcceptZ)/NEntries << "\n" << endl;
 
 }
 
