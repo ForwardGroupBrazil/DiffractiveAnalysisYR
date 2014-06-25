@@ -256,7 +256,8 @@ void BosonRPTotem(string inputfile, string outputfile,double XSmcW, double XSmcZ
 
   }
 
-  unsigned NEntries = tr->GetEntries();
+  //unsigned NEntries = tr->GetEntries();
+  unsigned NEntries = 50000;
 
   cout << "\nR U N N I N G" << endl;
   cout << "Reading TREE: "<<NEntries<<" events"<<endl;
@@ -291,6 +292,8 @@ void BosonRPTotem(string inputfile, string outputfile,double XSmcW, double XSmcZ
   for(int unsigned i=0; i<NEntries; i++) {
 
     tr->GetEntry(i);
+
+    //cout << "Event " << i << endl;
 
     double progress = 10.0*i/(1.0*NEntries);
     Int_t k = TMath::FloorNint(progress);
@@ -383,7 +386,6 @@ void BosonRPTotem(string inputfile, string outputfile,double XSmcW, double XSmcZ
       TLorentzVector vec_t = (vec_pf - vec_pi);
 
       t_proton_minus = vec_t.Mag2();
-
       accept = HistoRPCMSMinus->GetBinContent(HistoRPCMSMinus->GetXaxis()->FindBin(fabs(t_proton_minus)),HistoRPCMSMinus->GetYaxis()->FindBin(xi_proton_minus));
 
       if(debug){
@@ -421,6 +423,8 @@ void BosonRPTotem(string inputfile, string outputfile,double XSmcW, double XSmcZ
       if ((fabs (LeadingElectronsP4->at(0).eta()) >= 1.5660) && (fabs (LeadingElectronsP4->at(0).eta()) <= 2.5)){
 	if (LeadingElectronsIsolation->at(0)<0.04 && LeadingElectronsIsoEcal->at(0)<0.05 && LeadingElectronsIsoHcal->at(0)<0.025) isoEndCap1 = true;
       }
+
+      if (isoEndCap1 || isoBarrel1) isolation = true;
 
       if ((fabs (LeadingElectronsP4->at(0).eta()) <= 1.4442) ){
 	if (LeadingElectronsInnerHits->at(0) == 0 && (fabs (LeadingElectronsDCot[0]) >= 0.02 || fabs (LeadingElectronsDist->at(0)) >= 0.02 ) && fabs (LeadingElectronsDeltaEtaTkClu->at(0)) < 0.004 && fabs (LeadingElectronsDeltaPhiTkClu->at(0)) < 0.06 && LeadingElectronsSigmaIeIe->at(0) < 0.01 && LeadingElectronsHE->at(0) < 0.04 ) eleBarrel1 = true;
