@@ -179,6 +179,7 @@ void BosonRPTotem(string inputfile, string outputfile,double XSmcW, double XSmcZ
   std::vector<TH1F*> hVectorProtonAcceptanceTMinus;
   std::vector<TH1F*> hVectorProtonAcceptanceTPlus;
   std::vector<TH1F*> hVectorAccept;
+  std::vector<TH1F*> hVectorVertex;
 
   std::string step0 = "no_accept_RP";
   std::string step1 = "accept_RP_boson";
@@ -253,6 +254,10 @@ void BosonRPTotem(string inputfile, string outputfile,double XSmcW, double XSmcZ
     sprintf(name,"Acceptance_%s",GroupHisto.at(j).c_str());
     TH1F *hAccept = new TH1F(name,";N_{RP}/N_{GEN}; N events",100,0.,1.);
     hVectorAccept.push_back(hAccept);
+
+    sprintf(name,"VertexMultiplicity_%s",GroupHisto.at(j).c_str());
+    TH1F *hVertex = new TH1F(name,";Vertex Multiplicity; N events",10,0,10);
+    hVectorVertex.push_back(hVertex);
 
   }
 
@@ -337,6 +342,8 @@ void BosonRPTotem(string inputfile, string outputfile,double XSmcW, double XSmcZ
     bool acceptWE = false;
     bool acceptWMu = false;
 
+    bool SingleVertex = false;
+
     if (debug) std::cout << ">> EVENT " << i << " <<"  <<endl;
 
     if (protonLorentzVector->size() == 1){
@@ -374,6 +381,7 @@ void BosonRPTotem(string inputfile, string outputfile,double XSmcW, double XSmcZ
       hVectorProtonEnergy.at(0)->Fill(protonLorentzVector->at(0).energy());
       hVectorProtonXi.at(0)->Fill(xi_proton_plus);
       hVectorProtonT.at(0)->Fill(fabs(t_proton_plus));
+      hVectorVertex.at(0)->Fill(nVertex);
 
     }
 
@@ -399,19 +407,23 @@ void BosonRPTotem(string inputfile, string outputfile,double XSmcW, double XSmcZ
       hVectorProtonEnergy.at(0)->Fill(protonLorentzVector->at(0).energy());
       hVectorProtonXi.at(0)->Fill(xi_proton_minus);
       hVectorProtonT.at(0)->Fill(fabs(t_proton_minus));
+      hVectorVertex.at(0)->Fill(nVertex);
+
     } 
 
     if (debug) cout << "-- END --\n" << endl;
+
+    if (nVertex == 1) SingleVertex = true;
 
     if (ZMassDiElectron > 60. && ZMassDiElectron < 110.) ZMassE = true;
     if (ZMassDiMuon > 60. && ZMassDiMuon < 110.) ZMassMu = true;
     if (WMassElectron > 60. && WMassElectron < 110.) WMassE = true;
     if (WMassMuon > 60. && WMassMuon < 110.) WMassMu = true;
-
-    if(ZMassE && !ZMassMu && !WMassE && !WMassMu) ZFillE = true;
-    if(ZMassMu && !ZMassE && !WMassE && !WMassMu) ZFillMu = true;
-    if(WMassE && !ZMassE && !ZMassMu && !WMassMu) WFillE = true;
-    if(WMassMu && !ZMassE && !ZMassMu && !WMassE) WFillMu = true;
+   
+    if(SingleVertex && ZMassE && !ZMassMu && !WMassE && !WMassMu) ZFillE = true;
+    if(SingleVertex && ZMassMu && !ZMassE && !WMassE && !WMassMu) ZFillMu = true;
+    if(SingleVertex && WMassE && !ZMassE && !ZMassMu && !WMassMu) WFillE = true;
+    if(SingleVertex && WMassMu && !ZMassE && !ZMassMu && !WMassE) WFillMu = true;
 
     // Isolation One Leading Electrons
     if(WFillE){
@@ -519,6 +531,7 @@ void BosonRPTotem(string inputfile, string outputfile,double XSmcW, double XSmcZ
       AcceptW+=accept;
       ++selectedW;
 
+      hVectorVertex.at(1)->Fill(nVertex);
       hVectorAccept.at(1)->Fill(accept);
       hVectorProtonEta.at(1)->Fill(protonLorentzVector->at(0).eta(),accept);
       hVectorProtonPz.at(1)->Fill(protonLorentzVector->at(0).pz(),accept);
@@ -556,6 +569,7 @@ void BosonRPTotem(string inputfile, string outputfile,double XSmcW, double XSmcZ
       AcceptW+=accept;
       ++selectedW;
 
+      hVectorVertex.at(1)->Fill(nVertex);
       hVectorAccept.at(1)->Fill(accept);
       hVectorProtonEta.at(1)->Fill(protonLorentzVector->at(0).eta(),accept);
       hVectorProtonPz.at(1)->Fill(protonLorentzVector->at(0).pz(),accept);
@@ -593,6 +607,7 @@ void BosonRPTotem(string inputfile, string outputfile,double XSmcW, double XSmcZ
       AcceptZ+=accept;
       ++selectedZ;
 
+      hVectorVertex.at(1)->Fill(nVertex);
       hVectorAccept.at(1)->Fill(accept);
       hVectorProtonEta.at(1)->Fill(protonLorentzVector->at(0).eta(),accept);
       hVectorProtonPz.at(1)->Fill(protonLorentzVector->at(0).pz(),accept);
@@ -632,6 +647,7 @@ void BosonRPTotem(string inputfile, string outputfile,double XSmcW, double XSmcZ
       AcceptZ+=accept;
       ++selectedZ;
 
+      hVectorVertex.at(1)->Fill(nVertex);
       hVectorAccept.at(1)->Fill(accept);
       hVectorProtonEta.at(1)->Fill(protonLorentzVector->at(0).eta(),accept);
       hVectorProtonPz.at(1)->Fill(protonLorentzVector->at(0).pz(),accept);
@@ -670,6 +686,8 @@ void BosonRPTotem(string inputfile, string outputfile,double XSmcW, double XSmcZ
   hVectorCrossSection[1]->Scale(weight,"width");
 
   out->cd();
+  hVectorVertex[0]->Write();
+  hVectorVertex[1]->Write();
   hVectorProtonEta[0]->Write();
   hVectorProtonPz[0]->Write();
   hVectorProtonEnergy[0]->Write();
@@ -720,12 +738,16 @@ void BosonRPTotem(string inputfile, string outputfile,double XSmcW, double XSmcZ
   outstring << "\nS U M M A R Y" << endl;
   outstring << "--> Boson W: " << endl;
   outstring << "Total Selected Events W (not normalized): " << selectedW << endl;
+  outstring << "Total Selected Events W (normalized): " << AcceptW << endl;
   if(selectedW > 0) outstring << "Average Acceptance for W: " << AcceptW/selectedW << endl;
+  outstring << "Visible Cross Section for W: " << (XSmcW*selectedW)/NEntries << endl;
   outstring << "Visible Cross Section for W, weighted: " << (XSmcW*AcceptW)/NEntries << endl;
   outstring << "\n--> Boson Z: " << endl;
   outstring << "Total Selected Events Z (not normalized): " << selectedZ << endl;
+  outstring << "Total Selected Events Z (normalized): " << AcceptZ << endl;
   if(selectedZ > 0) outstring << "Average Acceptance for Z: " << AcceptZ/selectedZ << endl;
   outstring << "Visible Cross Section for Z, weighted: " << (XSmcZ*AcceptZ)/NEntries << "\n" << endl;
+  outstring << "Visible Cross Section for Z: " << (XSmcZ*selectedZ)/NEntries << endl;
 
 }
 
