@@ -95,7 +95,7 @@ class DijetsAnalyzer : public edm::EDAnalyzer {
       math::XYZTLorentzVector DiSystem(T obj1, W obj2);
 
     template <class T, class W>
-      double InvariantMass(T lepton1, W lepton2);
+      double InvariantMass(T jet1, W jet2);
 
     edm::InputTag particleFlowTag_;
     edm::InputTag VertexTag_;
