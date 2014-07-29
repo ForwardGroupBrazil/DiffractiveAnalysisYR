@@ -179,6 +179,7 @@ DijetsAnalyzer::DijetsAnalyzer(const edm::ParameterSet& iConfig):
   eventTree_->Branch("VertexPosition",&VertexPosition);
   eventTree_->Branch("ProtonsP4",&protonLorentzVector);
   eventTree_->Branch("JetsP4",&LeadingJetsP4);
+  eventTree_->Branch("PFP4",&PFP4);
   eventTree_->Branch("DijetEta",&DijetEta,"DijetEta/D");
   eventTree_->Branch("Mjj",&DijetMass,"DijetMass/D");
   eventTree_->Branch("Mpf",&Mpf,"Mpf/D");
