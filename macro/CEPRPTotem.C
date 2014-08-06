@@ -130,7 +130,7 @@ void CEPRPTotem(string inputfile, string outputfile,double XSmc, double lumi)
   std::vector<TH1F*> hVectorRjjMx;
 
   std::string step0 = "no_accept_RP";
-  std::string step1 = "accept_RP_boson";
+  std::string step1 = "accept_RP";
 
   std::vector <std::string> GroupHisto;
 
