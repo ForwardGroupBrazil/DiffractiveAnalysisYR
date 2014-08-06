@@ -411,7 +411,7 @@ void CEPRPTotem(string inputfile, string outputfile,double XSmc, double lumi)
       ++selected;
 
       hVectorVertex.at(1)->Fill(nVertex,acceptMinus*acceptPlus);
-      hVectorAccept.at(1)->Fill((acceptMinus + acceptPlus)/2.);
+      hVectorAccept.at(1)->Fill(acceptMinus*acceptPlus);
       hVectorProtonEta.at(1)->Fill(protonLorentzVector->at(0).eta(),acceptMinus*acceptPlus);
       hVectorProtonPz.at(1)->Fill(protonLorentzVector->at(0).pz(),acceptMinus*acceptPlus);
       hVectorProtonEnergy.at(1)->Fill(protonLorentzVector->at(0).energy(),acceptMinus*acceptPlus);
