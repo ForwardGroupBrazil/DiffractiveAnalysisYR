@@ -323,7 +323,7 @@ void CEPRPTotem(string inputfile, string outputfile,double XSmc, double lumi)
 	TLorentzVector vec_t_minus = (vec_pf_minus - vec_pi_minus);
 	t_proton_minus = vec_t_minus.Mag2();
 	acceptMinus = HistoRPCMSMinus->GetBinContent(HistoRPCMSMinus->GetXaxis()->FindBin(fabs(t_proton_minus)),HistoRPCMSMinus->GetYaxis()->FindBin(xi_proton_minus));
-	Mx = EBeam*TMath::Sqrt(xi_proton_minus*xi_proton_plus);
+	Mx = 2*EBeam*TMath::Sqrt(xi_proton_minus*xi_proton_plus);
 
 	if(debug){
 	  cout << "\nProton(0)+ and Proton(1)-" << endl;
@@ -353,7 +353,7 @@ void CEPRPTotem(string inputfile, string outputfile,double XSmc, double lumi)
 	TLorentzVector vec_t_minus = (vec_pf_minus - vec_pi_minus);
 	t_proton_minus = vec_t_minus.Mag2();
 	acceptMinus = HistoRPCMSMinus->GetBinContent(HistoRPCMSMinus->GetXaxis()->FindBin(fabs(t_proton_minus)),HistoRPCMSMinus->GetYaxis()->FindBin(xi_proton_minus));
-	Mx = EBeam*TMath::Sqrt(xi_proton_minus*xi_proton_plus);
+	Mx = 2*EBeam*TMath::Sqrt(xi_proton_minus*xi_proton_plus);
 
 	if(debug){
 	  cout << "\nProton(0)- and Proton(1)+" << endl;
