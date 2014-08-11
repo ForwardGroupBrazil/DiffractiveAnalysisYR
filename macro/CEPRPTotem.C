@@ -411,8 +411,11 @@ void CEPRPTotem(string inputfile, string outputfile,double XSmc, double lumi)
 	  hVectorJetsEta.at(0)->Fill(LeadingJetsP4->at(1).eta());
 	  hVectorMpf.at(0)->Fill(Mpf);
 	  hVectorMx.at(0)->Fill(Mx);
+	  hVectorMx_Totemsmearing.at(0)->Fill(Mx_Totemsmearing);
 	  hVectorRjjMpf.at(0)->Fill(Mjj/Mpf);
 	  hVectorRjjMx.at(0)->Fill(Mjj/Mx);
+	  hVectorRjjMx_Totemsmearing.at(0)->Fill(Mjj/Mx_Totemsmearing);
+	  
 	}
       }
 
