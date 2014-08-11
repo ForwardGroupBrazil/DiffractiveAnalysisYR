@@ -82,8 +82,10 @@ void CEPRPTotem(string inputfile, string outputfile,double XSmc, double lumi)
   int nVertex;
   double Mjj;
   double Mx;
+  double Mx_Totemsmearing;
   double Mpf;
   double RjjMx;
+  double RjjMx_Totemsmearing;
   double RjjMpf;
   double etamax;
   double etamin;
@@ -119,6 +121,10 @@ void CEPRPTotem(string inputfile, string outputfile,double XSmc, double lumi)
   std::vector<TH1F*> hVectorProtonTminus;
   std::vector<TH1F*> hVectorProtonXiplus;
   std::vector<TH1F*> hVectorProtonTplus;
+  std::vector<TH1F*> hVectorProtonXiminusTotemsmearing;
+  std::vector<TH1F*> hVectorProtonTminusTotemsmearing;
+  std::vector<TH1F*> hVectorProtonXiplusTotemsmearing;
+  std::vector<TH1F*> hVectorProtonTplusTotemsmearing;
   std::vector<TH1F*> hVectorVertex;
   std::vector<TH1F*> hVectorAccept;
   std::vector<TH1F*> hVectorDijetsM;
@@ -126,8 +132,10 @@ void CEPRPTotem(string inputfile, string outputfile,double XSmc, double lumi)
   std::vector<TH1F*> hVectorJetsPt;
   std::vector<TH1F*> hVectorMpf;
   std::vector<TH1F*> hVectorMx;
+  std::vector<TH1F*> hVectorMx_TotemSmearing;
   std::vector<TH1F*> hVectorRjjMpf;
   std::vector<TH1F*> hVectorRjjMx;
+  std::vector<TH1F*> hVectorRjjMx_TotemSmearing;
 
   std::string step0 = "no_accept_RP";
   std::string step1 = "accept_RP";
@@ -232,7 +240,7 @@ void CEPRPTotem(string inputfile, string outputfile,double XSmc, double lumi)
     TH1F *hRjjMx = new TH1F(name,";Rjj = Mjj/Mx; N events",500,0.,5.);
     hVectorRjjMx.push_back(hRjjMx);
     
-    sprintf(name,"RjjMx__Totemsmearing_%s",GroupHisto.at(j).c_str());
+    sprintf(name,"RjjMx_Totemsmearing_%s",GroupHisto.at(j).c_str());
     TH1F *hRjjMx_Totemsmearing = new TH1F(name,";Rjj = Mjj/Mx_Totemsmearing; N events",500,0.,5.);
     hVectorRjjMx_Totemsmearing.push_back(hRjjMx_Totemsmearing);
 
@@ -480,6 +488,13 @@ void CEPRPTotem(string inputfile, string outputfile,double XSmc, double lumi)
       hVectorMx.at(1)->Fill(Mx,acceptMinus*acceptPlus);
       hVectorRjjMpf.at(1)->Fill(Mjj/Mpf,acceptMinus*acceptPlus);
       hVectorRjjMx.at(1)->Fill(Mjj/Mx,acceptMinus*acceptPlus);
+      
+      hVectorProtonXiminusTotemsmearing.at(1)->Fill(xi_proton_minus_rec,acceptMinus*acceptPlus);
+      hVectorProtonXiplusTotemsmearing.at(1)->Fill(xi_proton_plus_rec,acceptMinus*acceptPlus);
+      hVectorProtonTminusTotemsmearing.at(1)->Fill(fabs(t_proton_minus_rec),acceptMinus*acceptPlus);
+      hVectorProtonTplusTotemsmearing.at(1)->Fill(fabs(t_proton_plus_rec),acceptMinus*acceptPlus);
+      hVectorMx_Totemsmearing.at(1)->Fill(Mx_Totemsmearing,acceptMinus*acceptPlus);
+      hVectorRjjMx_Totemsmearing.at(1)->Fill(Mjj/Mx_Totemsmearing,acceptMinus*acceptPlus);
     }
 
 
@@ -501,13 +516,19 @@ void CEPRPTotem(string inputfile, string outputfile,double XSmc, double lumi)
   hVectorProtonTminus[0]->Write();
   hVectorProtonXiplus[0]->Write();
   hVectorProtonTplus[0]->Write();
+  hVectorProtonXiminusTotemsmearing[0]->Write();
+  hVectorProtonTminusTotemsmearing[0]->Write();
+  hVectorProtonXiplusTotemsmearing[0]->Write();
+  hVectorProtonTplusTotemsmearing[0]->Write();
   hVectorJetsPt[0]->Write();
   hVectorJetsEta[0]->Write();
   hVectorDijetsM[0]->Write();
   hVectorMpf[0]->Write();
   hVectorMx[0]->Write();
+  hVectorMx_Totemsmearing[0]->Write();
   hVectorRjjMpf[0]->Write();
   hVectorRjjMx[0]->Write();
+  hVectorRjjMx_Totemsmearing[0]->Write();
 
   hVectorVertex[1]->Write();
   hVectorAccept[1]->Write();
@@ -518,13 +539,19 @@ void CEPRPTotem(string inputfile, string outputfile,double XSmc, double lumi)
   hVectorProtonTminus[1]->Write();
   hVectorProtonXiplus[1]->Write();
   hVectorProtonTplus[1]->Write();
+  hVectorProtonXiminusTotemsmearing[1]->Write();
+  hVectorProtonTminusTotemsmearing[1]->Write();
+  hVectorProtonXiplusTotemsmearing[1]->Write();
+  hVectorProtonTplusTotemsmearing[1]->Write();
   hVectorJetsPt[1]->Write();
   hVectorJetsEta[1]->Write();
   hVectorDijetsM[1]->Write();
   hVectorMpf[1]->Write();
   hVectorMx[1]->Write();
+  hVectorMx_Totemsmearing[1]->Write();
   hVectorRjjMpf[1]->Write();
   hVectorRjjMx[1]->Write();
+  hVectorRjjMx_Totemsmearing[1]->Write();
 
   out->Close();
   inf->Close();
