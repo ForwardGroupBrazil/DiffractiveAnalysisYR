@@ -191,6 +191,22 @@ void CEPRPTotem(string inputfile, string outputfile,double XSmc, double lumi)
     sprintf(name,"ProtonTPlus_%s",GroupHisto.at(j).c_str());
     TH1F *hProtonTplus = new TH1F(name,";|t|^{+}; N events",50,0.,1);
     hVectorProtonTplus.push_back(hProtonTplus);
+    
+    sprintf(name,"ProtonXiMinusTotemSmearing_%s",GroupHisto.at(j).c_str());
+    TH1F *hProtonXiminusTotemSmearing = new TH1F(name,";#xi^{-}; N events",50,0.,0.2);
+    hVectorProtonXiminusTotemSmearing.push_back(hProtonXiminusTotemSmearing);
+
+    sprintf(name,"ProtonTMinusTotemSmearing_%s",GroupHisto.at(j).c_str());
+    TH1F *hProtonTminusTotemSmearing = new TH1F(name,";|t|^{-}; N events",50,0.,1);
+    hVectorProtonTminusTotemSmearing.push_back(hProtonTminusTotemSmearing);
+
+    sprintf(name,"ProtonXiPlus_%s",GroupHisto.at(j).c_str());
+    TH1F *hProtonXiplusTotemSmearing = new TH1F(name,";#xi^{+}; N events",50,0.,0.2);
+    hVectorProtonXiplusTotemSmearing.push_back(hProtonXiplusTotemSmearing);
+
+    sprintf(name,"ProtonTPlusTotemSmearing_%s",GroupHisto.at(j).c_str());
+    TH1F *hProtonTplusTotemSmearing = new TH1F(name,";|t|^{+}; N events",50,0.,1);
+    hVectorProtonTplusTotemSmearing.push_back(hProtonTplusTotemSmearing);
 
     sprintf(name,"Mjj_%s",GroupHisto.at(j).c_str());
     TH1F *hDijetsM = new TH1F(name,";Mjj; N events",1000,0.,1000.);
@@ -203,6 +219,10 @@ void CEPRPTotem(string inputfile, string outputfile,double XSmc, double lumi)
     sprintf(name,"Mx_%s",GroupHisto.at(j).c_str());
     TH1F *hMx = new TH1F(name,";Mx; N events",1000,0.,1000.);
     hVectorMx.push_back(hMx);
+    
+    sprintf(name,"Mx_Totemsmearing_%s",GroupHisto.at(j).c_str());
+    TH1F *hMx_Totemsmearing = new TH1F(name,";Mx_Totemsmearing; N events",1000,0.,1000.);
+    hVectorMx_Totemsmearing.push_back(hMx_Totemsmearing);
 
     sprintf(name,"RjjMpf_%s",GroupHisto.at(j).c_str());
     TH1F *hRjjMpf = new TH1F(name,";Rjj = Mjj/Mpf; N events",500,0.,5.);
@@ -211,6 +231,10 @@ void CEPRPTotem(string inputfile, string outputfile,double XSmc, double lumi)
     sprintf(name,"RjjMx_%s",GroupHisto.at(j).c_str());
     TH1F *hRjjMx = new TH1F(name,";Rjj = Mjj/Mx; N events",500,0.,5.);
     hVectorRjjMx.push_back(hRjjMx);
+    
+    sprintf(name,"RjjMx__Totemsmearing_%s",GroupHisto.at(j).c_str());
+    TH1F *hRjjMx_Totemsmearing = new TH1F(name,";Rjj = Mjj/Mx_Totemsmearing; N events",500,0.,5.);
+    hVectorRjjMx_Totemsmearing.push_back(hRjjMx_Totemsmearing);
 
     sprintf(name,"JetsEta_%s",GroupHisto.at(j).c_str());
     TH1F *hJetsEta = new TH1F(name,";#eta; N events",100,-6.,6.);
