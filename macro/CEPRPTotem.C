@@ -274,6 +274,7 @@ void CEPRPTotem(string inputfile, string outputfile,double XSmc, double lumi)
     double acceptMinus = -999.;
     double acceptPlus = -999.;
     double Mx = -999.;
+    double Mx_Totemsmearing = -999.;
 
     bool accPT = false;
     bool accETA = false;
@@ -355,6 +356,7 @@ void CEPRPTotem(string inputfile, string outputfile,double XSmc, double lumi)
 	acceptMinus = HistoRPCMSMinus->GetBinContent(HistoRPCMSMinus->GetXaxis()->FindBin(fabs(t_proton_minus)),HistoRPCMSMinus->GetYaxis()->FindBin(xi_proton_minus));
 	Mx = 2*EBeam*TMath::Sqrt(xi_proton_minus*xi_proton_plus);
 
+
 	if(debug){
 	  cout << "\nProton(0)- and Proton(1)+" << endl;
 	  cout << "--> xi, plus: " << xi_proton_plus << endl;
@@ -367,6 +369,20 @@ void CEPRPTotem(string inputfile, string outputfile,double XSmc, double lumi)
 	}
 
       }
+      
+      	//totem proton reconstructed
+        float sigma_xi45=0.00714986 - 0.0408903*xi_proton_plus + 0.0965813*xi_proton_plus*xi_proton_plus; // sigma45 vs xi from Hubert
+        float sigma_xi56=0.00720615 - 0.0418783*xi_proton_minus + 0.0999515*xi_proton_minus*xi_proton_minus; // sigma56 vs xi from Hubert
+        float xi_proton_plus_rec = xi_proton_plus + gRandom->Gaus(0,sigma_xi45);
+        float xi_proton_minus_rec = xi_proton_minus + gRandom->Gaus(0,sigma_xi56);
+
+        double sigma_t45=0.233365*t_proton_plus - 0.0975751*t_proton_plus*t_proton_plus; // sigma_t45 vs t from Hubert
+        double sigma_t56=0.233365*t_proton_minus - 0.0975751*t_proton_minus*t_proton_minus; // sigma_t56 vs t from Hubert
+        double t_proton_plus_rec = t_proton_plus + gRandom->Gaus(0,sigma_t45);
+        double t_proton_minus_rec = t_proton_minus + gRandom->Gaus(0,sigma_t56);
+        
+        
+        Mx_Totemsmearing = 2*EBeam*TMath::Sqrt(xi_proton_minus_rec*xi_proton_plus_rec);
 
       if (Hminus || Hplus){
 	hVectorVertex.at(0)->Fill(nVertex);
@@ -381,6 +397,12 @@ void CEPRPTotem(string inputfile, string outputfile,double XSmc, double lumi)
 	hVectorProtonXiplus.at(0)->Fill(xi_proton_plus);
 	hVectorProtonTminus.at(0)->Fill(fabs(t_proton_minus));
 	hVectorProtonTplus.at(0)->Fill(fabs(t_proton_plus));
+        hVectorProtonXiminusTotemSmearing.at(0)->Fill(xi_proton_minus_rec);
+	hVectorProtonXiplusTotemSmearing.at(0)->Fill(xi_proton_plus_rec);
+	hVectorProtonTminusTotemSmearing.at(0)->Fill(fabs(t_proton_minus_rec));
+	hVectorProtonTplusTotemSmearing.at(0)->Fill(fabs(t_proton_plus_rec));
+	
+	
 	if(LeadingJetsP4->size()>1){
 	  hVectorDijetsM.at(0)->Fill(Mjj);
 	  hVectorJetsPt.at(0)->Fill(LeadingJetsP4->at(0).pt());
@@ -399,7 +421,7 @@ void CEPRPTotem(string inputfile, string outputfile,double XSmc, double lumi)
     if (debug) cout << "-- END --\n" << endl;
 
     if(LeadingJetsP4->size()>1){
-      if(fabs(LeadingJetsP4->at(0).eta()) < 3. && fabs(LeadingJetsP4->at(1).eta()) < 3. ) accETA = true;
+      if(fabs(LeadingJetsP4->at(0).eta()) < 2.5 && fabs(LeadingJetsP4->at(1).eta()) < 2.5 ) accETA = true;
       if(LeadingJetsP4->at(0).pt() > 30. && LeadingJetsP4->at(1).pt() > 30. ) accPT = true;
     }
 
