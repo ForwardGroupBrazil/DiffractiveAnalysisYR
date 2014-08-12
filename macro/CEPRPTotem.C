@@ -1,15 +1,12 @@
 /*
-
-// Y E L L O W   R E P O R T   M A C R O 
+// Y E L L O W R E P O R T M A C R O
 // Author: D. Figueiredo and E. Melo
-
 Goal": obtain some extrapolations
-
  */
 
 // C++
 #include <stdio.h>
-#include <math.h> 
+#include <math.h>
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -35,7 +32,6 @@ Goal": obtain some extrapolations
 #include <TMatrixT.h>
 #include "TMath.h"
 #include "TLorentzVector.h"
-
 #define PI 3.141592653589793
 
 void CEPRPTotem(string inputfile, string outputfile,double XSmc, double lumi)
@@ -44,10 +40,8 @@ void CEPRPTotem(string inputfile, string outputfile,double XSmc, double lumi)
   //Parameters
   // Lumi = luminosity [pb-1]
   // XSmc = cross section MC
-
   double weight = pow(lumi,-1);
   double EBeam = 6500.;
-
   bool debug = false; // print code output
 
   //------------ FWLite libraries ------
@@ -56,20 +50,16 @@ void CEPRPTotem(string inputfile, string outputfile,double XSmc, double lumi)
   gROOT->ProcessLine("#include<vector>");
 
   //------------ files -----------------
-  TFile *inf  = TFile::Open(inputfile.c_str());
+  TFile *inf = TFile::Open(inputfile.c_str());
   TFile *out = TFile::Open(outputfile.c_str(),"RECREATE");
   TTree *tr = (TTree*)inf->Get("DijetsAnalyzer/Event");
-
   TString outtxt = outputfile;
   outtxt.ReplaceAll("root","txt");
   std::ofstream outstring(outtxt);
-
   TFile *RPFileCMSMinus = TFile::Open("matrix_xi_vs_t_right.root");
-  TFile *RPFileCMSPlus  = TFile::Open("matrix_xi_vs_t_left.root");
-
+  TFile *RPFileCMSPlus = TFile::Open("matrix_xi_vs_t_left.root");
   TH2F *HistoRPCMSMinus = (TH2F*)RPFileCMSMinus->Get("accep_xi_vs_t_right");
   TH2F *HistoRPCMSPlus = (TH2F*)RPFileCMSPlus->Get("accep_xi_vs_t_left");
-
   TH1::SetDefaultSumw2(true);
   TH2::SetDefaultSumw2(true);
 
@@ -77,7 +67,6 @@ void CEPRPTotem(string inputfile, string outputfile,double XSmc, double lumi)
   std::vector <ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double> > > *protonLorentzVector;
   std::vector <ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double> > > *LeadingJetsP4;
   std::vector <ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double> > > *PFP4;
-
   int nTracks;
   int nVertex;
   double Mjj;
@@ -91,11 +80,9 @@ void CEPRPTotem(string inputfile, string outputfile,double XSmc, double lumi)
   double etamin;
   double accept = 0.;
   int selected = 0;
-
   TBranch *bprotonLorentzVector;
   TBranch *bLeadingJetsP4;
   TBranch *bPFP4;
-
   TBranch *bnTracks;
   TBranch *bnVertex;
   TBranch *bMjj;
@@ -121,10 +108,10 @@ void CEPRPTotem(string inputfile, string outputfile,double XSmc, double lumi)
   std::vector<TH1F*> hVectorProtonTminus;
   std::vector<TH1F*> hVectorProtonXiplus;
   std::vector<TH1F*> hVectorProtonTplus;
-  std::vector<TH1F*> hVectorProtonXiminusTotemsmearing;
-  std::vector<TH1F*> hVectorProtonTminusTotemsmearing;
-  std::vector<TH1F*> hVectorProtonXiplusTotemsmearing;
-  std::vector<TH1F*> hVectorProtonTplusTotemsmearing;
+  std::vector<TH1F*> hVectorProtonXiminusTotemSmearing;
+  std::vector<TH1F*> hVectorProtonTminusTotemSmearing;
+  std::vector<TH1F*> hVectorProtonXiplusTotemSmearing;
+  std::vector<TH1F*> hVectorProtonTplusTotemSmearing;
   std::vector<TH1F*> hVectorVertex;
   std::vector<TH1F*> hVectorAccept;
   std::vector<TH1F*> hVectorDijetsM;
@@ -139,15 +126,12 @@ void CEPRPTotem(string inputfile, string outputfile,double XSmc, double lumi)
 
   std::string step0 = "no_accept_RP";
   std::string step1 = "accept_RP";
-
   std::vector <std::string> GroupHisto;
-
   GroupHisto.push_back(step0);
   GroupHisto.push_back(step1);
 
   for (std::vector<std::string>::size_type j=0; j<GroupHisto.size(); j++){
     char name[300];
-
     sprintf(name,"ProtonAcceptanceXiMinus_%s",GroupHisto.at(j).c_str());
     TH1F *hProtonAccXiMinus = new TH1F(name,";#xi; N events",50,0.,1.);
     hVectorProtonAcceptanceXiMinus.push_back(hProtonAccXiMinus);
@@ -199,7 +183,7 @@ void CEPRPTotem(string inputfile, string outputfile,double XSmc, double lumi)
     sprintf(name,"ProtonTPlus_%s",GroupHisto.at(j).c_str());
     TH1F *hProtonTplus = new TH1F(name,";|t|^{+}; N events",50,0.,1);
     hVectorProtonTplus.push_back(hProtonTplus);
-    
+
     sprintf(name,"ProtonXiMinusTotemSmearing_%s",GroupHisto.at(j).c_str());
     TH1F *hProtonXiminusTotemSmearing = new TH1F(name,";#xi^{-}; N events",50,0.,0.2);
     hVectorProtonXiminusTotemSmearing.push_back(hProtonXiminusTotemSmearing);
@@ -208,7 +192,7 @@ void CEPRPTotem(string inputfile, string outputfile,double XSmc, double lumi)
     TH1F *hProtonTminusTotemSmearing = new TH1F(name,";|t|^{-}; N events",50,0.,1);
     hVectorProtonTminusTotemSmearing.push_back(hProtonTminusTotemSmearing);
 
-    sprintf(name,"ProtonXiPlus_%s",GroupHisto.at(j).c_str());
+    sprintf(name,"ProtonXiPlusTotemSmearing_%s",GroupHisto.at(j).c_str());
     TH1F *hProtonXiplusTotemSmearing = new TH1F(name,";#xi^{+}; N events",50,0.,0.2);
     hVectorProtonXiplusTotemSmearing.push_back(hProtonXiplusTotemSmearing);
 
@@ -227,10 +211,10 @@ void CEPRPTotem(string inputfile, string outputfile,double XSmc, double lumi)
     sprintf(name,"Mx_%s",GroupHisto.at(j).c_str());
     TH1F *hMx = new TH1F(name,";Mx; N events",1000,0.,1000.);
     hVectorMx.push_back(hMx);
-    
-    sprintf(name,"Mx_Totemsmearing_%s",GroupHisto.at(j).c_str());
-    TH1F *hMx_Totemsmearing = new TH1F(name,";Mx_Totemsmearing; N events",1000,0.,1000.);
-    hVectorMx_Totemsmearing.push_back(hMx_Totemsmearing);
+
+    sprintf(name,"Mx_TotemSmearing_%s",GroupHisto.at(j).c_str());
+    TH1F *hMx_TotemSmearing = new TH1F(name,";Mx_Totemsmearing; N events",1000,0.,1000.);
+    hVectorMx_TotemSmearing.push_back(hMx_TotemSmearing);
 
     sprintf(name,"RjjMpf_%s",GroupHisto.at(j).c_str());
     TH1F *hRjjMpf = new TH1F(name,";Rjj = Mjj/Mpf; N events",500,0.,5.);
@@ -239,10 +223,10 @@ void CEPRPTotem(string inputfile, string outputfile,double XSmc, double lumi)
     sprintf(name,"RjjMx_%s",GroupHisto.at(j).c_str());
     TH1F *hRjjMx = new TH1F(name,";Rjj = Mjj/Mx; N events",500,0.,5.);
     hVectorRjjMx.push_back(hRjjMx);
-    
-    sprintf(name,"RjjMx_Totemsmearing_%s",GroupHisto.at(j).c_str());
-    TH1F *hRjjMx_Totemsmearing = new TH1F(name,";Rjj = Mjj/Mx_Totemsmearing; N events",500,0.,5.);
-    hVectorRjjMx_Totemsmearing.push_back(hRjjMx_Totemsmearing);
+
+    sprintf(name,"RjjMx_TotemSmearing_%s",GroupHisto.at(j).c_str());
+    TH1F *hRjjMx_TotemSmearing = new TH1F(name,";Rjj = Mjj/Mx_Totemsmearing; N events",500,0.,5.);
+    hVectorRjjMx_TotemSmearing.push_back(hRjjMx_TotemSmearing);
 
     sprintf(name,"JetsEta_%s",GroupHisto.at(j).c_str());
     TH1F *hJetsEta = new TH1F(name,";#eta; N events",100,-6.,6.);
@@ -252,11 +236,10 @@ void CEPRPTotem(string inputfile, string outputfile,double XSmc, double lumi)
     TH1F *hJetsPt = new TH1F(name,";p_{T} [GeV]; N events",1500,0.,1500.);
     hVectorJetsPt.push_back(hJetsPt);
 
-
   }
 
   //unsigned NEntries = tr->GetEntries();
-  unsigned NEntries = 500;
+  unsigned NEntries = 50000;
 
   cout << "\nR U N N I N G" << endl;
   cout << "Reading TREE: "<<NEntries<<" events"<<endl;
@@ -269,33 +252,28 @@ void CEPRPTotem(string inputfile, string outputfile,double XSmc, double lumi)
   hVectorProtonAcceptanceTMinus.at(0)=HistoRPCMSMinus->ProjectionX();
   hVectorProtonAcceptanceXiPlus.at(0)=HistoRPCMSPlus->ProjectionY();
   hVectorProtonAcceptanceXiMinus.at(0)=HistoRPCMSMinus->ProjectionY();
-
   hVectorProtonAcceptanceTPlus.at(0)->SetTitle("");
   hVectorProtonAcceptanceTMinus.at(0)->SetTitle("");
   hVectorProtonAcceptanceXiPlus.at(0)->SetTitle("");
   hVectorProtonAcceptanceXiMinus.at(0)->SetTitle("");
-
   hVectorProtonAcceptanceTPlus.at(0)->GetXaxis()->SetTitle("|t|, RP^{CMS, +} acceptance");
   hVectorProtonAcceptanceTMinus.at(0)->GetXaxis()->SetTitle("|t|, RP^{CMS, -} acceptance");
   hVectorProtonAcceptanceXiPlus.at(0)->GetXaxis()->SetTitle("#xi, RP^{CMS, +} acceptance");
   hVectorProtonAcceptanceXiMinus.at(0)->GetXaxis()->SetTitle("#xi, RP^{CMS, -} acceptance");
-
   hVectorProtonAcceptanceTPlus.at(0)->SetName("TMatrixAcceptanceRPPlus");
   hVectorProtonAcceptanceTMinus.at(0)->SetName("TMatrixAcceptanceRPMinus");
   hVectorProtonAcceptanceXiPlus.at(0)->SetName("XiMatrixAcceptanceRPPlus");
   hVectorProtonAcceptanceXiMinus.at(0)->SetName("XiMatrixAcceptanceRPMinus");
 
   int decade = 0;
-
   for(int unsigned i=0; i<NEntries; i++) {
 
     tr->GetEntry(i);
-
     double progress = 10.0*i/(1.0*NEntries);
     Int_t k = TMath::FloorNint(progress);
     if (k > decade)
       cout<<10*k<<" %"<<endl;
-    decade = k; 
+    decade = k;
 
     double perc1 = -999;
     double perc2 = -999;
@@ -307,17 +285,14 @@ void CEPRPTotem(string inputfile, string outputfile,double XSmc, double lumi)
     double acceptPlus = -999.;
     double Mx = -999.;
     double Mx_Totemsmearing = -999.;
-
     bool accPT = false;
     bool accETA = false;
     bool SingleVertex = false;
-
     bool Hminus = false;
     bool Hplus = false;
     bool genSel = false;
 
-    if (debug) std::cout << ">> EVENT " << i << " <<"  <<endl;
-
+    if (debug) std::cout << ">> EVENT " << i << " <<" <<endl;
     if (protonLorentzVector->size() == 1){
       if (debug) cout << "--> proton(1) pZ [GeV]: " << protonLorentzVector->at(0).pz() << endl;
       perc1 = protonLorentzVector->at(0).pz()/EBeam;
@@ -330,91 +305,73 @@ void CEPRPTotem(string inputfile, string outputfile,double XSmc, double lumi)
       }
       perc1 = protonLorentzVector->at(0).pz()/EBeam;
       perc2 = protonLorentzVector->at(1).pz()/EBeam;
-
-      if(protonLorentzVector->at(0).pz() > 0. && protonLorentzVector->at(1).pz() < 0.) Hplus = true; 
+      if(protonLorentzVector->at(0).pz() > 0. && protonLorentzVector->at(1).pz() < 0.) Hplus = true;
       if(protonLorentzVector->at(0).pz() < 0. && protonLorentzVector->at(1).pz() > 0.) Hminus = true;
-
     }
 
     if (protonLorentzVector->size()>1 && fabs(perc1) > 0.75 && fabs(perc2) > 0.75) genSel = true;
-
-
     if(genSel){
-
       if(Hplus){
-
-	xi_proton_plus =  ( 1. - (protonLorentzVector->at(0).pz()/EBeam) );
+	xi_proton_plus = ( 1. - (protonLorentzVector->at(0).pz()/EBeam) );
 	TLorentzVector vec_pi_plus(0.,0.,EBeam,EBeam);
 	TLorentzVector vec_pf_plus(protonLorentzVector->at(0).px(),protonLorentzVector->at(0).py(),protonLorentzVector->at(0).pz(),protonLorentzVector->at(0).energy());
 	TLorentzVector vec_t_plus = (vec_pf_plus - vec_pi_plus);
 	t_proton_plus = vec_t_plus.Mag2();
 	acceptPlus = HistoRPCMSPlus->GetBinContent(HistoRPCMSPlus->GetXaxis()->FindBin(fabs(t_proton_plus)),HistoRPCMSPlus->GetYaxis()->FindBin(xi_proton_plus));
-
-	xi_proton_minus =  ( 1. + (protonLorentzVector->at(1).pz()/EBeam) );
+	xi_proton_minus = ( 1. + (protonLorentzVector->at(1).pz()/EBeam) );
 	TLorentzVector vec_pi_minus(0.,0.,-EBeam,EBeam);
 	TLorentzVector vec_pf_minus(protonLorentzVector->at(1).px(),protonLorentzVector->at(1).py(),protonLorentzVector->at(1).pz(),protonLorentzVector->at(1).energy());
 	TLorentzVector vec_t_minus = (vec_pf_minus - vec_pi_minus);
 	t_proton_minus = vec_t_minus.Mag2();
 	acceptMinus = HistoRPCMSMinus->GetBinContent(HistoRPCMSMinus->GetXaxis()->FindBin(fabs(t_proton_minus)),HistoRPCMSMinus->GetYaxis()->FindBin(xi_proton_minus));
 	Mx = 2*EBeam*TMath::Sqrt(xi_proton_minus*xi_proton_plus);
-
 	if(debug){
 	  cout << "\nProton(0)+ and Proton(1)-" << endl;
 	  cout << "--> xi, plus: " << xi_proton_plus << endl;
-	  cout << "-->  t, plus: " << t_proton_plus << endl;
+	  cout << "--> t, plus: " << t_proton_plus << endl;
 	  cout << "--> RP Acceptance, plus: " << acceptPlus << endl;
 	  cout << "--> xi, minus: " << xi_proton_minus << endl;
-	  cout << "-->  t, minus: " << t_proton_minus << endl;
+	  cout << "--> t, minus: " << t_proton_minus << endl;
 	  cout << "--> RP Acceptance, minus: " << acceptMinus << endl;
 	  cout << "--> Mx: " << Mx << endl;
 	}
-
       }
-
       if(Hminus){
-
-	xi_proton_plus =  ( 1. - (protonLorentzVector->at(1).pz()/EBeam) );
+	xi_proton_plus = ( 1. - (protonLorentzVector->at(1).pz()/EBeam) );
 	TLorentzVector vec_pi_plus(0.,0.,EBeam,EBeam);
 	TLorentzVector vec_pf_plus(protonLorentzVector->at(1).px(),protonLorentzVector->at(1).py(),protonLorentzVector->at(1).pz(),protonLorentzVector->at(1).energy());
 	TLorentzVector vec_t_plus = (vec_pf_plus - vec_pi_plus);
 	t_proton_plus = vec_t_plus.Mag2();
 	acceptPlus = HistoRPCMSPlus->GetBinContent(HistoRPCMSPlus->GetXaxis()->FindBin(fabs(t_proton_plus)),HistoRPCMSPlus->GetYaxis()->FindBin(xi_proton_plus));
-
-	xi_proton_minus =  ( 1. + (protonLorentzVector->at(0).pz()/EBeam) );
+	xi_proton_minus = ( 1. + (protonLorentzVector->at(0).pz()/EBeam) );
 	TLorentzVector vec_pi_minus(0.,0.,-EBeam,EBeam);
 	TLorentzVector vec_pf_minus(protonLorentzVector->at(0).px(),protonLorentzVector->at(0).py(),protonLorentzVector->at(0).pz(),protonLorentzVector->at(0).energy());
 	TLorentzVector vec_t_minus = (vec_pf_minus - vec_pi_minus);
 	t_proton_minus = vec_t_minus.Mag2();
 	acceptMinus = HistoRPCMSMinus->GetBinContent(HistoRPCMSMinus->GetXaxis()->FindBin(fabs(t_proton_minus)),HistoRPCMSMinus->GetYaxis()->FindBin(xi_proton_minus));
 	Mx = 2*EBeam*TMath::Sqrt(xi_proton_minus*xi_proton_plus);
-
-
 	if(debug){
 	  cout << "\nProton(0)- and Proton(1)+" << endl;
 	  cout << "--> xi, plus: " << xi_proton_plus << endl;
-	  cout << "-->  t, plus: " << t_proton_plus << endl;
+	  cout << "--> t, plus: " << t_proton_plus << endl;
 	  cout << "--> RP Acceptance, plus: " << acceptPlus << endl;
 	  cout << "--> xi, minus: " << xi_proton_minus << endl;
-	  cout << "-->  t, minus: " << t_proton_minus << endl;
+	  cout << "--> t, minus: " << t_proton_minus << endl;
 	  cout << "--> RP Acceptance, minus: " << acceptMinus << endl;
 	  cout << "--> Mx: " << Mx << endl;
 	}
-
       }
-      
-      	//totem proton reconstructed
-        float sigma_xi45=0.00714986 - 0.0408903*xi_proton_plus + 0.0965813*xi_proton_plus*xi_proton_plus; // sigma45 vs xi from Hubert
-        float sigma_xi56=0.00720615 - 0.0418783*xi_proton_minus + 0.0999515*xi_proton_minus*xi_proton_minus; // sigma56 vs xi from Hubert
-        float xi_proton_plus_rec = xi_proton_plus + gRandom->Gaus(0,sigma_xi45);
-        float xi_proton_minus_rec = xi_proton_minus + gRandom->Gaus(0,sigma_xi56);
 
-        double sigma_t45=0.233365*t_proton_plus - 0.0975751*t_proton_plus*t_proton_plus; // sigma_t45 vs t from Hubert
-        double sigma_t56=0.233365*t_proton_minus - 0.0975751*t_proton_minus*t_proton_minus; // sigma_t56 vs t from Hubert
-        double t_proton_plus_rec = t_proton_plus + gRandom->Gaus(0,sigma_t45);
-        double t_proton_minus_rec = t_proton_minus + gRandom->Gaus(0,sigma_t56);
-        
-        
-        Mx_Totemsmearing = 2*EBeam*TMath::Sqrt(xi_proton_minus_rec*xi_proton_plus_rec);
+      //totem proton reconstructed
+      float sigma_xi45=0.00714986 - 0.0408903*xi_proton_plus + 0.0965813*xi_proton_plus*xi_proton_plus; // sigma45 vs xi from Hubert
+      float sigma_xi56=0.00720615 - 0.0418783*xi_proton_minus + 0.0999515*xi_proton_minus*xi_proton_minus; // sigma56 vs xi from Hubert
+      float xi_proton_plus_rec = xi_proton_plus + gRandom->Gaus(0,sigma_xi45);
+      float xi_proton_minus_rec = xi_proton_minus + gRandom->Gaus(0,sigma_xi56);
+      double sigma_t45=0.233365*t_proton_plus - 0.0975751*t_proton_plus*t_proton_plus; // sigma_t45 vs t from Hubert
+      double sigma_t56=0.233365*t_proton_minus - 0.0975751*t_proton_minus*t_proton_minus; // sigma_t56 vs t from Hubert
+      double t_proton_plus_rec = t_proton_plus + gRandom->Gaus(0,sigma_t45);
+      double t_proton_minus_rec = t_proton_minus + gRandom->Gaus(0,sigma_t56);
+      Mx_Totemsmearing = 2*EBeam*TMath::Sqrt(xi_proton_minus_rec*xi_proton_plus_rec);
 
       if (Hminus || Hplus){
 	hVectorVertex.at(0)->Fill(nVertex);
@@ -429,12 +386,11 @@ void CEPRPTotem(string inputfile, string outputfile,double XSmc, double lumi)
 	hVectorProtonXiplus.at(0)->Fill(xi_proton_plus);
 	hVectorProtonTminus.at(0)->Fill(fabs(t_proton_minus));
 	hVectorProtonTplus.at(0)->Fill(fabs(t_proton_plus));
-        hVectorProtonXiminusTotemSmearing.at(0)->Fill(xi_proton_minus_rec);
+	hVectorProtonXiminusTotemSmearing.at(0)->Fill(xi_proton_minus_rec);
 	hVectorProtonXiplusTotemSmearing.at(0)->Fill(xi_proton_plus_rec);
 	hVectorProtonTminusTotemSmearing.at(0)->Fill(fabs(t_proton_minus_rec));
 	hVectorProtonTplusTotemSmearing.at(0)->Fill(fabs(t_proton_plus_rec));
-	
-	
+
 	if(LeadingJetsP4->size()>1){
 	  hVectorDijetsM.at(0)->Fill(Mjj);
 	  hVectorJetsPt.at(0)->Fill(LeadingJetsP4->at(0).pt());
@@ -443,30 +399,24 @@ void CEPRPTotem(string inputfile, string outputfile,double XSmc, double lumi)
 	  hVectorJetsEta.at(0)->Fill(LeadingJetsP4->at(1).eta());
 	  hVectorMpf.at(0)->Fill(Mpf);
 	  hVectorMx.at(0)->Fill(Mx);
-	  hVectorMx_Totemsmearing.at(0)->Fill(Mx_Totemsmearing);
+	  hVectorMx_TotemSmearing.at(0)->Fill(Mx_Totemsmearing);
 	  hVectorRjjMpf.at(0)->Fill(Mjj/Mpf);
 	  hVectorRjjMx.at(0)->Fill(Mjj/Mx);
-	  hVectorRjjMx_Totemsmearing.at(0)->Fill(Mjj/Mx_Totemsmearing);
-	  
+	  hVectorRjjMx_TotemSmearing.at(0)->Fill(Mjj/Mx_Totemsmearing);
 	}
       }
-
     }
 
     if (debug) cout << "-- END --\n" << endl;
-
     if(LeadingJetsP4->size()>1){
       if(fabs(LeadingJetsP4->at(0).eta()) < 2.5 && fabs(LeadingJetsP4->at(1).eta()) < 2.5 ) accETA = true;
       if(LeadingJetsP4->at(0).pt() > 30. && LeadingJetsP4->at(1).pt() > 30. ) accPT = true;
     }
-
     if (nVertex == 1) SingleVertex = true;
 
     if(SingleVertex && accPT && accETA && genSel && (Hplus || Hminus)) {
-      //accept += (acceptMinus + acceptPlus)/2.;
       accept += acceptMinus*acceptPlus;
       ++selected;
-
       hVectorVertex.at(1)->Fill(nVertex,acceptMinus*acceptPlus);
       hVectorAccept.at(1)->Fill(acceptMinus*acceptPlus);
       hVectorProtonEta.at(1)->Fill(protonLorentzVector->at(0).eta(),acceptMinus*acceptPlus);
@@ -488,25 +438,20 @@ void CEPRPTotem(string inputfile, string outputfile,double XSmc, double lumi)
       hVectorMx.at(1)->Fill(Mx,acceptMinus*acceptPlus);
       hVectorRjjMpf.at(1)->Fill(Mjj/Mpf,acceptMinus*acceptPlus);
       hVectorRjjMx.at(1)->Fill(Mjj/Mx,acceptMinus*acceptPlus);
-      
-      hVectorProtonXiminusTotemsmearing.at(1)->Fill(xi_proton_minus_rec,acceptMinus*acceptPlus);
-      hVectorProtonXiplusTotemsmearing.at(1)->Fill(xi_proton_plus_rec,acceptMinus*acceptPlus);
-      hVectorProtonTminusTotemsmearing.at(1)->Fill(fabs(t_proton_minus_rec),acceptMinus*acceptPlus);
-      hVectorProtonTplusTotemsmearing.at(1)->Fill(fabs(t_proton_plus_rec),acceptMinus*acceptPlus);
-      hVectorMx_Totemsmearing.at(1)->Fill(Mx_Totemsmearing,acceptMinus*acceptPlus);
-      hVectorRjjMx_Totemsmearing.at(1)->Fill(Mjj/Mx_Totemsmearing,acceptMinus*acceptPlus);
+      hVectorProtonXiminusTotemSmearing.at(1)->Fill(xi_proton_minus_rec,acceptMinus*acceptPlus);
+      hVectorProtonXiplusTotemSmearing.at(1)->Fill(xi_proton_plus_rec,acceptMinus*acceptPlus);
+      hVectorProtonTminusTotemSmearing.at(1)->Fill(fabs(t_proton_minus_rec),acceptMinus*acceptPlus);
+      hVectorProtonTplusTotemSmearing.at(1)->Fill(fabs(t_proton_plus_rec),acceptMinus*acceptPlus);
+      hVectorMx_TotemSmearing.at(1)->Fill(Mx_Totemsmearing,acceptMinus*acceptPlus);
+      hVectorRjjMx_TotemSmearing.at(1)->Fill(Mjj/Mx_Totemsmearing,acceptMinus*acceptPlus);
     }
-
-
   }// end loop events
 
   out->cd();
-
   hVectorProtonAcceptanceTPlus[0]->Write();
   hVectorProtonAcceptanceTMinus[0]->Write();
   hVectorProtonAcceptanceXiPlus[0]->Write();
   hVectorProtonAcceptanceXiMinus[0]->Write();
-
   hVectorVertex[0]->Write();
   hVectorAccept[0]->Write();
   hVectorProtonEta[0]->Write();
@@ -516,20 +461,19 @@ void CEPRPTotem(string inputfile, string outputfile,double XSmc, double lumi)
   hVectorProtonTminus[0]->Write();
   hVectorProtonXiplus[0]->Write();
   hVectorProtonTplus[0]->Write();
-  hVectorProtonXiminusTotemsmearing[0]->Write();
-  hVectorProtonTminusTotemsmearing[0]->Write();
-  hVectorProtonXiplusTotemsmearing[0]->Write();
-  hVectorProtonTplusTotemsmearing[0]->Write();
+  hVectorProtonXiminusTotemSmearing[0]->Write();
+  hVectorProtonTminusTotemSmearing[0]->Write();
+  hVectorProtonXiplusTotemSmearing[0]->Write();
+  hVectorProtonTplusTotemSmearing[0]->Write();
   hVectorJetsPt[0]->Write();
   hVectorJetsEta[0]->Write();
   hVectorDijetsM[0]->Write();
   hVectorMpf[0]->Write();
   hVectorMx[0]->Write();
-  hVectorMx_Totemsmearing[0]->Write();
+  hVectorMx_TotemSmearing[0]->Write();
   hVectorRjjMpf[0]->Write();
   hVectorRjjMx[0]->Write();
-  hVectorRjjMx_Totemsmearing[0]->Write();
-
+  hVectorRjjMx_TotemSmearing[0]->Write();
   hVectorVertex[1]->Write();
   hVectorAccept[1]->Write();
   hVectorProtonEta[1]->Write();
@@ -539,19 +483,19 @@ void CEPRPTotem(string inputfile, string outputfile,double XSmc, double lumi)
   hVectorProtonTminus[1]->Write();
   hVectorProtonXiplus[1]->Write();
   hVectorProtonTplus[1]->Write();
-  hVectorProtonXiminusTotemsmearing[1]->Write();
-  hVectorProtonTminusTotemsmearing[1]->Write();
-  hVectorProtonXiplusTotemsmearing[1]->Write();
-  hVectorProtonTplusTotemsmearing[1]->Write();
+  hVectorProtonXiminusTotemSmearing[1]->Write();
+  hVectorProtonTminusTotemSmearing[1]->Write();
+  hVectorProtonXiplusTotemSmearing[1]->Write();
+  hVectorProtonTplusTotemSmearing[1]->Write();
   hVectorJetsPt[1]->Write();
   hVectorJetsEta[1]->Write();
   hVectorDijetsM[1]->Write();
   hVectorMpf[1]->Write();
   hVectorMx[1]->Write();
-  hVectorMx_Totemsmearing[1]->Write();
+  hVectorMx_TotemSmearing[1]->Write();
   hVectorRjjMpf[1]->Write();
   hVectorRjjMx[1]->Write();
-  hVectorRjjMx_Totemsmearing[1]->Write();
+  hVectorRjjMx_TotemSmearing[1]->Write();
 
   out->Close();
   inf->Close();
@@ -560,9 +504,9 @@ void CEPRPTotem(string inputfile, string outputfile,double XSmc, double lumi)
 
   cout << "\nS U M M A R Y" << endl;
   cout << "--> CEP: " << endl;
-  cout << "Total Selected CEP events      : " << selected << endl;
+  cout << "Total Selected CEP events : " << selected << endl;
   cout << "Normalized Selected CEP events : " << accept << endl;
-  cout << "Visible Cross Section for CEP  : " << (XSmc*accept)/NEntries << "\n" << endl;
+  cout << "Visible Cross Section for CEP : " << (XSmc*accept)/NEntries << "\n" << endl;
 
   // Saving Text File
   outstring << "\nI N P U T S" << endl;
@@ -573,9 +517,8 @@ void CEPRPTotem(string inputfile, string outputfile,double XSmc, double lumi)
   outstring << "Cross Section CEP MC: " << XSmc << endl;
   outstring << "\nS U M M A R Y" << endl;
   outstring << "--> CEP: " << endl;
-  outstring << "Total Selected CEP events      : " << selected << endl;
+  outstring << "Total Selected CEP events : " << selected << endl;
   outstring << "Normalized Selected CEP events : " << accept << endl;
-  outstring << "Visible Cross Section for CEP  : " << (XSmc*accept)/NEntries << "\n" << endl;
+  outstring << "Visible Cross Section for CEP : " << (XSmc*accept)/NEntries << "\n" << endl;
 
 }
-
