@@ -1,5 +1,5 @@
 /*
-// Y E L L O W R E P O R T M A C R O
+// Y E L L O W   R E P O R T   M A C R O
 // Author: D. Figueiredo and E. Melo
 Goal": obtain some extrapolations
  */
