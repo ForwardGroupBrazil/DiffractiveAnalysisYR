@@ -318,7 +318,7 @@ void DijetsAnalyzer::FillCollections(const edm::Event& iEvent, const edm::EventS
     for(itGen=0; itGen < gensize; ++itGen){
       const reco::GenParticle* genAll = &((*genParticle)[itGen]);
       if (genAll->status() != 1) continue;
-      if (genAll->pdgId() != 2212) continue;
+      if (fabs(genAll->pdgId()) != 2212) continue;
       protonVector.push_back(genAll);
     }
   }
