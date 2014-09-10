@@ -1,0 +1,178 @@
+multicrab running on Fri Jun 20 11:11:57 2014
+  working directory   /storage1/dmf/YellowReport/CMSSW_6_2_5/src/DiffractiveAnalysisYR/DiffractiveBoson/test/submit/multicrab_140619_201356
+crab:  Version 2.10.5_patch1 running on Fri Jun 20 11:11:58 2014 CET (09:11:58 UTC)
+
+crab. Working options:
+	scheduler           remoteGlidein
+	job type            CMSSW
+	server              OFF
+	working directory   /storage1/dmf/YellowReport/CMSSW_6_2_5/src/DiffractiveAnalysisYR/DiffractiveBoson/test/submit/PomwigWtoENu_plus/
+
+crab:  --------------------
+Dataset: /SingleDiffractiveWToENu_eta-plus_13TeV-pomwig/Fall13dr-castor_tsg_PU1bx50_POSTLS162_V1-v1/AODSIM
+Local output: /storage1/dmf/YellowReport/CMSSW_6_2_5/src/DiffractiveAnalysisYR/DiffractiveBoson/test/submit/PomwigWtoENu_plus/res/
+Total Events read: 938306
+Total Files read: 213
+Total Jobs : 99
+Luminosity section summary file: /storage1/dmf/YellowReport/CMSSW_6_2_5/src/DiffractiveAnalysisYR/DiffractiveBoson/test/submit/PomwigWtoENu_plus/res/lumiSummary.json
+   # Jobs: Retrieved:99
+
+----------------------------
+
+crab:  The summary file inputLumiSummaryOfTask.json about input run and lumi isn't created
+crab:  No Lumi file to compare
+Log file is /storage1/dmf/YellowReport/CMSSW_6_2_5/src/DiffractiveAnalysisYR/DiffractiveBoson/test/submit/PomwigWtoENu_plus/log/crab.log
+crab:  Version 2.10.5_patch1 running on Fri Jun 20 11:12:05 2014 CET (09:12:05 UTC)
+
+crab. Working options:
+	scheduler           remoteGlidein
+	job type            CMSSW
+	server              OFF
+	working directory   /storage1/dmf/YellowReport/CMSSW_6_2_5/src/DiffractiveAnalysisYR/DiffractiveBoson/test/submit/PomwigZtoEE_plus/
+
+crab:  --------------------
+Dataset: /SingleDiffractiveZToEE_M-50_eta-plus_13TeV-pomwig/Fall13dr-castor_tsg_PU1bx50_POSTLS162_V1-v1/AODSIM
+Local output: /storage1/dmf/YellowReport/CMSSW_6_2_5/src/DiffractiveAnalysisYR/DiffractiveBoson/test/submit/PomwigZtoEE_plus/res/
+Total Events read: 1979009
+Total Files read: 243
+Total Jobs : 199
+Luminosity section summary file: /storage1/dmf/YellowReport/CMSSW_6_2_5/src/DiffractiveAnalysisYR/DiffractiveBoson/test/submit/PomwigZtoEE_plus/res/lumiSummary.json
+   # Jobs: Retrieved:199
+
+----------------------------
+
+crab:  The summary file inputLumiSummaryOfTask.json about input run and lumi isn't created
+crab:  No Lumi file to compare
+Log file is /storage1/dmf/YellowReport/CMSSW_6_2_5/src/DiffractiveAnalysisYR/DiffractiveBoson/test/submit/PomwigZtoEE_plus/log/crab.log
+crab:  Version 2.10.5_patch1 running on Fri Jun 20 11:12:14 2014 CET (09:12:14 UTC)
+
+crab. Working options:
+	scheduler           remoteGlidein
+	job type            CMSSW
+	server              OFF
+	working directory   /storage1/dmf/YellowReport/CMSSW_6_2_5/src/DiffractiveAnalysisYR/DiffractiveBoson/test/submit/PomwigWtoENu_minus/
+
+crab:  --------------------
+Dataset: /SingleDiffractiveWToENu_eta-minus_13TeV-pomwig/Fall13dr-castor_tsg_PU1bx50_POSTLS162_V1-v1/AODSIM
+Local output: /storage1/dmf/YellowReport/CMSSW_6_2_5/src/DiffractiveAnalysisYR/DiffractiveBoson/test/submit/PomwigWtoENu_minus/res/
+Total Events read: 969649
+Total Files read: 117
+Total Jobs : 97
+Luminosity section summary file: /storage1/dmf/YellowReport/CMSSW_6_2_5/src/DiffractiveAnalysisYR/DiffractiveBoson/test/submit/PomwigWtoENu_minus/res/lumiSummary.json
+   # Jobs: Retrieved:97
+
+----------------------------
+
+crab:  The summary file inputLumiSummaryOfTask.json about input run and lumi isn't created
+crab:  No Lumi file to compare
+Log file is /storage1/dmf/YellowReport/CMSSW_6_2_5/src/DiffractiveAnalysisYR/DiffractiveBoson/test/submit/PomwigWtoENu_minus/log/crab.log
+crab:  Version 2.10.5_patch1 running on Fri Jun 20 11:12:19 2014 CET (09:12:19 UTC)
+
+crab. Working options:
+	scheduler           remoteGlidein
+	job type            CMSSW
+	server              OFF
+	working directory   /storage1/dmf/YellowReport/CMSSW_6_2_5/src/DiffractiveAnalysisYR/DiffractiveBoson/test/submit/PomwigWtoMuNu_minus/
+
+crab:  --------------------
+Dataset: /SingleDiffractiveWToMuNu_eta-minus_13TeV-pomwig/Fall13dr-castor_tsg_PU1bx50_POSTLS162_V1-v1/AODSIM
+Local output: /storage1/dmf/YellowReport/CMSSW_6_2_5/src/DiffractiveAnalysisYR/DiffractiveBoson/test/submit/PomwigWtoMuNu_minus/res/
+Total Events read: 991645
+Total Files read: 121
+Total Jobs : 100
+Luminosity section summary file: /storage1/dmf/YellowReport/CMSSW_6_2_5/src/DiffractiveAnalysisYR/DiffractiveBoson/test/submit/PomwigWtoMuNu_minus/res/lumiSummary.json
+   # Jobs: Retrieved:100
+
+----------------------------
+
+crab:  The summary file inputLumiSummaryOfTask.json about input run and lumi isn't created
+crab:  No Lumi file to compare
+Log file is /storage1/dmf/YellowReport/CMSSW_6_2_5/src/DiffractiveAnalysisYR/DiffractiveBoson/test/submit/PomwigWtoMuNu_minus/log/crab.log
+crab:  Version 2.10.5_patch1 running on Fri Jun 20 11:12:24 2014 CET (09:12:24 UTC)
+
+crab. Working options:
+	scheduler           remoteGlidein
+	job type            CMSSW
+	server              OFF
+	working directory   /storage1/dmf/YellowReport/CMSSW_6_2_5/src/DiffractiveAnalysisYR/DiffractiveBoson/test/submit/PomwigWtoMuNu_plus/
+
+crab:  --------------------
+Dataset: /SingleDiffractiveWToMuNu_eta-plus_13TeV-pomwig/Fall13dr-castor_tsg_PU1bx50_POSTLS162_V1-v1/AODSIM
+Local output: /storage1/dmf/YellowReport/CMSSW_6_2_5/src/DiffractiveAnalysisYR/DiffractiveBoson/test/submit/PomwigWtoMuNu_plus/res/
+Total Events read: 1019800
+Total Files read: 125
+Total Jobs : 103
+Luminosity section summary file: /storage1/dmf/YellowReport/CMSSW_6_2_5/src/DiffractiveAnalysisYR/DiffractiveBoson/test/submit/PomwigWtoMuNu_plus/res/lumiSummary.json
+   # Jobs: Retrieved:103
+
+----------------------------
+
+crab:  The summary file inputLumiSummaryOfTask.json about input run and lumi isn't created
+crab:  No Lumi file to compare
+Log file is /storage1/dmf/YellowReport/CMSSW_6_2_5/src/DiffractiveAnalysisYR/DiffractiveBoson/test/submit/PomwigWtoMuNu_plus/log/crab.log
+crab:  Version 2.10.5_patch1 running on Fri Jun 20 11:12:29 2014 CET (09:12:29 UTC)
+
+crab. Working options:
+	scheduler           remoteGlidein
+	job type            CMSSW
+	server              OFF
+	working directory   /storage1/dmf/YellowReport/CMSSW_6_2_5/src/DiffractiveAnalysisYR/DiffractiveBoson/test/submit/PomwigZToMuMu_plus/
+
+crab:  --------------------
+Dataset: /SingleDiffractiveZToMuMu_M-50_eta-plus_13TeV-pomwig/Fall13dr-castor_tsg_PU1bx50_POSTLS162_V1-v1/AODSIM
+Local output: /storage1/dmf/YellowReport/CMSSW_6_2_5/src/DiffractiveAnalysisYR/DiffractiveBoson/test/submit/PomwigZToMuMu_plus/res/
+Total Events read: 1665074
+Total Files read: 202
+Total Jobs : 195
+Luminosity section summary file: /storage1/dmf/YellowReport/CMSSW_6_2_5/src/DiffractiveAnalysisYR/DiffractiveBoson/test/submit/PomwigZToMuMu_plus/res/lumiSummary.json
+   # Jobs: Retrieved:195
+
+----------------------------
+
+crab:  The summary file inputLumiSummaryOfTask.json about input run and lumi isn't created
+crab:  No Lumi file to compare
+Log file is /storage1/dmf/YellowReport/CMSSW_6_2_5/src/DiffractiveAnalysisYR/DiffractiveBoson/test/submit/PomwigZToMuMu_plus/log/crab.log
+crab:  Version 2.10.5_patch1 running on Fri Jun 20 11:12:37 2014 CET (09:12:37 UTC)
+
+crab. Working options:
+	scheduler           remoteGlidein
+	job type            CMSSW
+	server              OFF
+	working directory   /storage1/dmf/YellowReport/CMSSW_6_2_5/src/DiffractiveAnalysisYR/DiffractiveBoson/test/submit/PomwigZtoEE_minus/
+
+crab:  --------------------
+Dataset: /SingleDiffractiveZToEE_M-50_eta-minus_13TeV-pomwig/Fall13dr-castor_tsg_PU1bx50_POSTLS162_V1-v1/AODSIM
+Local output: /storage1/dmf/YellowReport/CMSSW_6_2_5/src/DiffractiveAnalysisYR/DiffractiveBoson/test/submit/PomwigZtoEE_minus/res/
+Total Events read: 1995549
+Total Files read: 246
+Total Jobs : 201
+Luminosity section summary file: /storage1/dmf/YellowReport/CMSSW_6_2_5/src/DiffractiveAnalysisYR/DiffractiveBoson/test/submit/PomwigZtoEE_minus/res/lumiSummary.json
+   # Jobs: Retrieved:201
+
+----------------------------
+
+crab:  The summary file inputLumiSummaryOfTask.json about input run and lumi isn't created
+crab:  No Lumi file to compare
+Log file is /storage1/dmf/YellowReport/CMSSW_6_2_5/src/DiffractiveAnalysisYR/DiffractiveBoson/test/submit/PomwigZtoEE_minus/log/crab.log
+crab:  Version 2.10.5_patch1 running on Fri Jun 20 11:12:45 2014 CET (09:12:45 UTC)
+
+crab. Working options:
+	scheduler           remoteGlidein
+	job type            CMSSW
+	server              OFF
+	working directory   /storage1/dmf/YellowReport/CMSSW_6_2_5/src/DiffractiveAnalysisYR/DiffractiveBoson/test/submit/PomwigZToMuMu_minus/
+
+crab:  --------------------
+Dataset: /SingleDiffractiveZToMuMu_M-50_eta-minus_13TeV-pomwig/Fall13dr-castor_tsg_PU1bx50_POSTLS162_V1-v1/AODSIM
+Local output: /storage1/dmf/YellowReport/CMSSW_6_2_5/src/DiffractiveAnalysisYR/DiffractiveBoson/test/submit/PomwigZToMuMu_minus/res/
+Total Events read: 1911744
+Total Files read: 233
+Total Jobs : 192
+Luminosity section summary file: /storage1/dmf/YellowReport/CMSSW_6_2_5/src/DiffractiveAnalysisYR/DiffractiveBoson/test/submit/PomwigZToMuMu_minus/res/lumiSummary.json
+   # Jobs: Retrieved:192
+
+----------------------------
+
+crab:  The summary file inputLumiSummaryOfTask.json about input run and lumi isn't created
+crab:  No Lumi file to compare
+Log file is /storage1/dmf/YellowReport/CMSSW_6_2_5/src/DiffractiveAnalysisYR/DiffractiveBoson/test/submit/PomwigZToMuMu_minus/log/crab.log
