@@ -367,7 +367,7 @@ void MesonRPTotem(string inputfile, string outputfile, double XSmcJpsi, double l
   
     if (JpsiFillMu && LeadingMuonsP4->size() > 1){
        if(fabs(LeadingMuonsP4->at(0).eta()) < 2.45 && fabs(LeadingMuonsP4->at(1).eta()) > 2.45) accETA = true;
-       if(LeadingMuonsP4->at(0).pt() > 1.0 && LeadingMuonsP4->at(1).pt() > 1.0) accPT = true;
+       //if(LeadingMuonsP4->at(0).pt() > 1.0 && LeadingMuonsP4->at(1).pt() > 1.0) accPT = true;
       
         acceptJpsiMu = true;
     }
