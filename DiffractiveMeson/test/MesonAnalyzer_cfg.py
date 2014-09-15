@@ -33,7 +33,7 @@ mesonJpsi = False
 
 class config: pass
 config.debug = False # Debugger
-config.Ebeam = 4000. # Beam Energy
+config.Ebeam = 6500. # Beam Energy
 
 
 # Setting Code Options.
